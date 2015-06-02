@@ -1,0 +1,48 @@
+# depslib dependency file v1.0
+1433270804 source:c:\users\hpcorei 3\documents\semestres\iii\datos\proyecto_2\main.cpp
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<direct.h>
+	<string.h>
+	<winbgim.h>
+	<windows.h>
+	<Personaje.h>
+	<Interfaz.h>
+	<tinythread.h>
+	<sstream>
+
+1433270764 c:\users\hpcorei 3\documents\semestres\iii\datos\proyecto_2\include\personaje.h
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+	<string.h>
+	<iostream>
+	<math.h>
+
+1433271081 c:\users\hpcorei 3\documents\semestres\iii\datos\proyecto_2\include\interfaz.h
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<direct.h>
+	<string.h>
+	<Personaje.h>
+	<sstream>
+
+1429240458 c:\users\hpcorei 3\documents\semestres\iii\datos\proyecto_2\include\tinythread.h
+	<windows.h>
+	<pthread.h>
+	<signal.h>
+	<sched.h>
+	<unistd.h>
+	<ostream>
+
+1428113418 source:c:\users\hpcorei 3\documents\semestres\iii\datos\proyecto_2\tinythread.cpp
+	<exception>
+	"tinythread.h"
+	<unistd.h>
+	<map>
+	<process.h>
+
