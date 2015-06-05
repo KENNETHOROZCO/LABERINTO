@@ -10,6 +10,7 @@
 #include<Interfaz.h>
 #include<tinythread.h>
 #include <sstream>
+#include <Grafo.h>
 
 /*
 grafo->listaNodos->goToStart();
@@ -21,8 +22,9 @@ if(nodo->listaArista.getElement()){
 using namespace std;
 using namespace tthread;
 Interfaz VInterfaz;
+Grafo *grafo = new Grafo();
 int segundos;
-int nivel=0;
+int nivel=1;
 int ayuda=0;
 thread t;
 thread t2;
@@ -58,12 +60,20 @@ void cronometro(void * aArg){
 
 void crearVentana(void * aArg){
     VInterfaz.crearVentana();
+    grafo->listaNodos->goToPos(10);
+    VInterfaz.pared(grafo->listaNodos->getElement(),nivel);
+    //VInterfaz.pintarGrafo(grafo,nivel);
+    /*VInterfaz.pintarCuadro(350,420);
+    VInterfaz.pintarCuadro(370,420);
+    VInterfaz.pintarCuadro(390,420);
     cout<<"Creando ventanas"<<endl;
     VInterfaz.dibujarGifs(true,200,200);
     VInterfaz.dibujarGifs(true,100,100);
     VInterfaz.dibujarGifs(true,250,250);
     VInterfaz.dibujarGifs(true,600,600);
-    VInterfaz.dibujarGifs(true,400,400);
+    VInterfaz.dibujarGifs(true,400,400);*/
+    VInterfaz.personaje.DPersonaje(0);
+    VInterfaz.personaje.DPersonaje(1);
     do{
        VInterfaz.mover();
     }while(VInterfaz.fin);
@@ -72,19 +82,13 @@ void crearVentana(void * aArg){
 
 
 void inicioHilos(){
-
-
-
-   // delete t;
-   // delete t2;
     thread t(cronometro, 0);
     thread t2(crearVentana,0);
-
     t.join();
     t2.join();
-
 }
 int main() {
+    grafo->arbol(4,5);
     inicioHilos();
 
   //  t.~thread();

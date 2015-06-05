@@ -27,8 +27,8 @@ public:
     virtual ~Personaje() {}
     void home(){
         rumbo=0;
-        ejeX=350;
-        ejeY=350;
+        ejeX=480;
+        ejeY=380;
         RT=0;
         GT=0;
         BT=0;
@@ -123,36 +123,37 @@ void DPersonaje(int b){
     //cuerpo
     setfillstyle(1,COLOR(RT,GT,BT));
     //cabeza
-    int x2=cos((rumbo*M_PI)/180)*17;//18
-    int y2=sin((rumbo*M_PI)/180)*17;//18
-    fillellipse(ejeX+x2,ejeY+y2,6,6);//8-7
+    int x2=cos((rumbo*M_PI)/180)*11;//18
+    int y2=sin((rumbo*M_PI)/180)*11;//18
+    fillellipse(ejeX+x2,ejeY+y2,4,4);//8-7
     //pie Superior Izquierdo
     int rumbo2=fmod(rumbo-60,360);
-    int x3=cos((rumbo2*M_PI)/180)*16;//17
-    int y3=sin((rumbo2*M_PI)/180)*16;//17
-    fillellipse(ejeX+x3,ejeY+y3,3,3);//5-5
+    int x3=cos((rumbo2*M_PI)/180)*11;//17
+    int y3=sin((rumbo2*M_PI)/180)*11;//17
+    fillellipse(ejeX+x3,ejeY+y3,2,2);//5-5
     //pie Inferior Izquierdo
     int rumbo3=fmod(rumbo-130,360);
-    int x4=cos((rumbo3*M_PI)/180)*16;//17
-    int y4=sin((rumbo3*M_PI)/180)*16;//17
-    fillellipse(ejeX+x4,ejeY+y4,3,3);//5-5
+    int x4=cos((rumbo3*M_PI)/180)*12;//17
+    int y4=sin((rumbo3*M_PI)/180)*12;//17
+    fillellipse(ejeX+x4,ejeY+y4,2,2);//5-5
     //pie Superior Derecho
     int rumbo4=fmod(rumbo-300,360);
-    int x5=cos((rumbo4*M_PI)/180)*16;//17
-    int y5=sin((rumbo4*M_PI)/180)*16;//17
-    fillellipse(ejeX+x5,ejeY+y5,3,3);//5-5
+    int x5=cos((rumbo4*M_PI)/180)*11;//17
+    int y5=sin((rumbo4*M_PI)/180)*11;//17
+    fillellipse(ejeX+x5,ejeY+y5,2,2);//5-5
     //pie Inferior Derecho
     int rumbo5=fmod(rumbo-230,360);
-    int x6=cos((rumbo5*M_PI)/180)*16;//18
-    int y6=sin((rumbo5*M_PI)/180)*16;//18
-    fillellipse(ejeX+x6,ejeY+y6,3,3);
+    int x6=cos((rumbo5*M_PI)/180)*12;//18
+    int y6=sin((rumbo5*M_PI)/180)*12;//18
+    fillellipse(ejeX+x6,ejeY+y6,2,2);
     if(b==0){
-       setfillstyle(1,COLOR(0,153,76));
+       setfillstyle(INTERLEAVE_FILL,COLOR(0,153,76));
     }
     else{
-        setfillstyle(1,COLOR(RT,GT,BT));//100 51 25
+        setfillstyle(HATCH_FILL,COLOR(RT,GT,BT));//100 51 25
     }
-    fillellipse(ejeX,ejeY,12,11);
+    fillellipse(ejeX,ejeY,7,7);
+
 }
 
 };

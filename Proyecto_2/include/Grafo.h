@@ -18,9 +18,12 @@ struct nodo{
 
 class Grafo
 {
+
+public:
     DLinkedList<Nodo> *listaNodos;
     Nodo *principal;
-public:
+    int dimensionX=0;
+    int dimensionY=0;
 Grafo(){
     principal= NULL;
     listaNodos=new DLinkedList<Nodo>();
@@ -55,7 +58,6 @@ void insertar_nodo(int indice){
 }
 
 void agrega_arista(Nodo *aux, Nodo *aux2, arista *nuevo,bool bandera){
-    arista *q;
     if(bandera){
         if(aux->listaAristas->getSize()==-1){
             nuevo->nodoDestino=aux2;
@@ -173,7 +175,9 @@ DLinkedList<Nodo> *getFinal(DLinkedList<Nodo> *lista){
 }
 
 void arbol(int x,int y){
-    generarLaberinto(x,y);
+    dimensionX=x;
+    dimensionY=y;
+    generarLaberinto(dimensionX,dimensionY);
     srand(time(NULL));
     DLinkedList<Nodo> *pila=new DLinkedList<Nodo>();
     DLinkedList<Nodo> *nuevoArbol=new DLinkedList<Nodo>();

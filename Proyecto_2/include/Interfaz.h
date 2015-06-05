@@ -8,6 +8,7 @@
 #include <string.h>
 #include<Personaje.h>
 #include <sstream>
+#include <Grafo.h>
 
 
 using namespace std;
@@ -15,7 +16,7 @@ using namespace std;
 class Interfaz
 {
 private:
-    int desplazar=10;// CANTIDAD DE ESPACIOS QUE SE VA A MOVER EL PERSONAJE
+    int desplazar=4;// CANTIDAD DE ESPACIOS QUE SE VA A MOVER EL PERSONAJE
     int color;
     int maxx = 900;
     int maxy = 700;
@@ -32,12 +33,14 @@ public:
         initwindow(maxx, maxy);
         setbkcolor(COLOR(200,165,20));
         cleardevice();
-        posx = maxx/2;
-        posy = maxy/2;
+        posx = 460;
+        posy = 360;
+        personaje.setPos(posx,posy);
     }
 
     void dibujarGifs(bool pintar,int x, int y){
         if(pintar==true){
+            setlinestyle(6,1,3);
             setfillstyle(1,COLOR(255,0,0));
             setcolor(COLOR(255,0,0));
             fillellipse(x-6,y,7,9);
@@ -57,6 +60,77 @@ public:
         if(personaje.getX()==250 && personaje.getY()==250){personaje.setGifs(1);}
         if(personaje.getX()==600 && personaje.getY()==600){personaje.setGifs(1);}
         if(personaje.getX()==400 && personaje.getY()==400){personaje.setGifs(1);}
+    }
+
+    //pinta un cuadro desde las dimensiones x,y
+    void pintarCuadro(int x, int y){
+        setlinestyle(6,1,2);
+        setcolor(COLOR(102,51,0));
+        rectangle(x,y,x+15,y+13);
+        rectangle(x+15,y,x+25,y+13);
+        rectangle(x,y+13,x+10,y+25);
+        rectangle(x+10,y+13,x+25,y+25);
+        setfillstyle(SOLID_FILL,COLOR(255,153,51));
+        bar(x+1,y+1,x+14,y+12);
+        bar(x+16,y+1,x+24,y+12);
+        bar(x+1,y+14,x+9,y+24);
+        bar(x+11,y+14,x+24,y+24);
+
+    }
+
+    void pared(Nodo *nodo,int nivel){
+        int x=480-(nivel*20);
+        int y=380-(nivel*20);
+        nodo->listaAristas->goToPos(0);
+        //line(x,y,x+2,y+2);
+        if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+            pintarCuadro(x-45,y-10);
+        }
+        nodo->listaAristas->goToPos(1);
+        if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+            pintarCuadro(x+20,y-10);
+        }
+        nodo->listaAristas->goToPos(2);
+        if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+            pintarCuadro(x-9,y-40);
+        }
+        nodo->listaAristas->goToPos(3);
+        if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+            pintarCuadro(x-10,y+20);
+        }
+    }
+    void pintarGrafo(Grafo *&grafo,int nivel){
+        int x=480-(nivel*20);
+        int y=380-(nivel*20);
+        grafo->listaNodos->goToStart();
+        for(int i=0;i<grafo->listaNodos->getSize();i++){
+            Nodo *nodo=grafo->listaNodos->getElement();
+            nodo->listaAristas->goToPos(0);
+            if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+                pintarCuadro(x-40,y);
+            }
+            nodo->listaAristas->goToPos(1);
+            if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+                pintarCuadro(x+20,y);
+            }
+            nodo->listaAristas->goToPos(2);
+            if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+                pintarCuadro(x-20,y-40);
+            }
+            nodo->listaAristas->goToPos(3);
+            if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+                pintarCuadro(x,y+20);
+            }
+            x+=40;
+            if(i%grafo->dimensionY==0){
+                y+=40;
+            }
+            grafo->listaNodos->next();
+        }
+    }
+
+    void dezplazarPersonaje(string direccion){
+
     }
 
     void teclaSeleccionada(int &tecla){
@@ -94,10 +168,11 @@ public:
         dibujarGifs(true,250,250);
         dibujarGifs(true,600,600);
         dibujarGifs(true,400,400);*/
-        personaje.setPos(posx,posy);
+        //personaje.setPos(posx,posy);
         personaje.DPersonaje(0); //PINTA EL PERSONAJE
         tecla = getch();// GUARDA LA TECLA SELECCIONADA
         personaje.DPersonaje(1);//BORRA EL PERSONAJE
+        personaje.setPos(posx,posy);
         recogerGifs();// REVISA SI PASO POR UN GIF
         cout<<"GIFS: "<<personaje.getGifs()<<endl;
         teclaSeleccionada(tecla);//REVISA QUE FLECHA FUE SELECCIONADA
