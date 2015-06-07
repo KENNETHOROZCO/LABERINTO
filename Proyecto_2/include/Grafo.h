@@ -482,7 +482,7 @@ DLinkedList<Nodo> *dijkstra( int destino){
     int peso;
     Nodo *act;
     Nodo *ad;
-    while( Q->getSize()!=0 ){                   //Mientras cola no este vacia
+    while( Q->getSize()!=0 ){//Mientras cola no este vacia
 
         act = Q->removeFirst() ;
 

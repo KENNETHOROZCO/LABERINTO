@@ -46,7 +46,7 @@
 	<map>
 	<process.h>
 
-1433691481 source:c:\users\hpcorei 3\desktop\laberinto\proyecto_2\main.cpp
+1433701137 source:c:\users\hpcorei 3\desktop\laberinto\proyecto_2\main.cpp
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
@@ -69,7 +69,7 @@
 	<iostream>
 	<math.h>
 
-1433694316 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\interfaz.h
+1433702297 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\interfaz.h
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
@@ -95,7 +95,7 @@
 	<map>
 	<process.h>
 
-1433694569 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\grafo.h
+1433695237 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\grafo.h
 	<iostream>
 	<conio.h>
 	<Nodo.h>

@@ -22,7 +22,6 @@ if(nodo->listaArista.getElement()){
 using namespace std;
 using namespace tthread;
 Interfaz VInterfaz;
-Grafo *grafo = new Grafo();
 int segundos;
 int nivel=4;
 int ayuda=0;
@@ -35,19 +34,22 @@ void crearVentana(void * aArg);
 
 void cambiarCronometro(){
     if(VInterfaz.personaje.getAyuda()){
-        segundos-=10;
+        segundos-=(segundos*0.3);
+        VInterfaz.personaje.setAyuda(false);
     }
 }
 void iniciarCuenta(){
     while(segundos!=-1 && VInterfaz.fin){
         settextstyle(2,0,12);
-        VInterfaz.tiempoA(segundos);
-        cambiarCronometro();
+        if(!VInterfaz.pausa){
+            VInterfaz.tiempoA(segundos);
+            cambiarCronometro();
+        }
+
     }
 }
-
 void setTiempo(){
-    segundos=((nivel/3)+3)*40;
+    segundos=((nivel/4)+1)*10;
     segundos+=VInterfaz.personaje.getExtraTime()+1;
     segundos-=ayuda;
 }
@@ -59,9 +61,9 @@ void cronometro(void * aArg){
     return;
 }
 
-
 void iniciarJuego(){
-    grafo->arbol(filas+nivel,columnas+nivel);
+    Grafo *grafo = new Grafo();
+    grafo->arbol(filas+(nivel/2),columnas+nivel);
     grafo->mostrar_grafo();
     VInterfaz.pintarGrafo(grafo,nivel);
     VInterfaz.personaje.DPersonaje1(0);
@@ -70,7 +72,8 @@ void iniciarJuego(){
        VInterfaz.mover(grafo);
     }while(VInterfaz.fin);
 }
-void crearVentana(void * aArg){
+
+void posInicio(){
     int x=320-(nivel*30);
     int y=250-(nivel*30);
     if(x<=60){
@@ -79,7 +82,11 @@ void crearVentana(void * aArg){
     if(y<=60){
         y=60;
     }
-    VInterfaz.crearVentana(x,y);
+    VInterfaz.posInicial(x,y);
+}
+void crearVentana(void * aArg){
+    VInterfaz.crearVentana();
+    posInicio();
     iniciarJuego();
 }
 

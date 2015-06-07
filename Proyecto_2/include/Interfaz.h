@@ -23,6 +23,7 @@ private:
     int posx,posy,posAntX,posAntY;
 
 public:
+    bool pausa=false;
     bool fin;
     Personaje personaje;
     Interfaz() { //constructor
@@ -33,10 +34,12 @@ public:
     }
     virtual ~Interfaz() {}
     // INICIALIZACION DE MODO GRAFICO
-    void crearVentana(int x,int y){
+    void crearVentana(){
         initwindow(maxx, maxy);
         setbkcolor(COLOR(0,0,0));// 255,255,102
         cleardevice();
+    }
+    void posInicial(int x, int y){
         posx = x;
         posy = y;
         posAntX=x;
@@ -79,7 +82,6 @@ public:
         if(nodo->getFruta()==true){
             personaje.setGifs(1);
             nodo->setFruta(false);
-            //dibujarGifs(false,personaje.getX(),personaje.getY());
         }
     }
 
@@ -211,8 +213,9 @@ public:
     }
 
     //guarda la ruta más corta de la posición del personaje
-    void pintarRutaCorta(Grafo *grafo){
-        setfillstyle(SOLID_FILL,COLOR(255,0,255));
+    void pintarRutaCorta(Grafo *grafo,int pintar){
+        if(pintar){setfillstyle(SOLID_FILL,COLOR(255,0,255));}
+        else{setfillstyle(SOLID_FILL,COLOR(0,0,0));}
         DLinkedList<Nodo> *ruta=grafo->dijkstra(personaje.getPosicion());
         int xActual=personaje.getX()-10;
         int yActual=personaje.getY()-15;
@@ -225,13 +228,13 @@ public:
                 bar(xActual,yActual,xActual+60,yActual+30);
                 xActual+=60;}
             else if(nodo->getNumero()==posActual-1){
-                bar(xActual+30,yActual,xActual-60,yActual+30);
+                bar(xActual+28,yActual,xActual-60,yActual+30);
                 xActual-=60;}
             else if(nodo->getNumero()==posActual+grafo->dimensionY){
                 bar(xActual,yActual,xActual+27,yActual+60);
                 yActual+=60;}
             else if(nodo->getNumero()==posActual-grafo->dimensionY){
-                bar(xActual,yActual+30,xActual+27,yActual-60);
+                bar(xActual,yActual+29,xActual+27,yActual-60);
                 yActual-=60;}
                 posActual=nodo->getNumero();
             cout<<"pos actual "<<posActual<<endl;
@@ -239,13 +242,12 @@ public:
                 break;
             }
         }
-
+        personaje.DPersonaje1(0);
     }
     //DETECTA SI UNA TECLA FUE SELECCIONADA Y VERIFICA CUAL FUE
     void teclaSeleccionada(int &tecla, Grafo *&grafo){
         int flecha;
         grafo->listaNodos->goToPos(personaje.getPosicion());
-        //Nodo *nodo=grafo->listaNodos->getElement();
         switch(tecla){
             case 0:
                 flecha=getch();
@@ -263,7 +265,12 @@ public:
                         desplazarPersonaje("D",270,grafo);
                         break;
                     case KEY_END:
-                        pintarRutaCorta(grafo);
+                        pintarRutaCorta(grafo,1);
+                        personaje.setAyuda(true);
+                        pausa=true;
+                        getch();
+                        pausa=false;
+                        pintarRutaCorta(grafo,0);
                         break;
                 }break;
             case 27: // TECLA ESC
