@@ -24,7 +24,7 @@ using namespace tthread;
 Interfaz VInterfaz;
 Grafo *grafo = new Grafo();
 int segundos;
-int nivel=7;
+int nivel=4;
 int ayuda=0;
 int filas=4;
 int columnas=5;

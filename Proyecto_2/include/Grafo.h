@@ -9,8 +9,6 @@
 #include<MinHeap.h>
 
 using namespace std;
-
-
 struct nodo{
             int numero;//nombre del vertice o nodo
             struct Nodo *siguiente;
@@ -153,7 +151,7 @@ void generar(DLinkedList<int> *lista){
         insertar_nodo(indice2);
         addArista(indice1,indice2,true);
     }
-    mostrar_grafo();
+    //mostrar_grafo();
 }
 
 DLinkedList<Nodo> *getFinal(DLinkedList<Nodo> *lista){
@@ -173,7 +171,7 @@ DLinkedList<Nodo> *getFinal(DLinkedList<Nodo> *lista){
         int indice2=listaNodos->getElement()->numero;
         addArista(indice1,indice2,true);
     }
-    mostrar_grafo();
+    //mostrar_grafo();
     return temp;
 }
 
@@ -186,7 +184,6 @@ void arbol(int x,int y){
     DLinkedList<Nodo> *nuevoArbol=new DLinkedList<Nodo>();
     listaNodos->goToStart();
     nuevoArbol=listaNodos;
-    cout<<"El tamaño de la lista es de: "<<nuevoArbol->getSize()<<endl;
     Nodo *temp=nuevoArbol->getElement();
     temp->visitado=true;
     listaNodos->clear();
@@ -220,12 +217,12 @@ void arbol(int x,int y){
             bandera=false;
         }
     }
-    cout<<pila->getSize()<<endl;
-    cout<<"El tamaño de la lista es de: "<<listaNodos->getSize()<<endl;
+
     agregarAristasExtras(x,y);
     reordenar(x,y);
-    mostrar_grafo();
-    cout<<"Tamaño del labrinto: "<<listaNodos->getSize()<<endl;
+    listaNodos->goToPos(listaNodos->getSize()-1);
+    listaNodos->getElement()->setSalida(true);
+    //mostrar_grafo();
 }
 
 bool existe(int indice, DLinkedList<arista> *lista){
@@ -261,23 +258,19 @@ void reordenar(int x,int y){
     }
     listaNodos->goToStart();
     for(int i=0; i<listaNodos->getSize()+1; i++){
-        //bool bandera=false;
         Nodo *temp=listaNodos->getElement();
         DLinkedList<arista> *lista=temp->listaAristas;
         lista->goToStart();
         for(int e=0; e<lista->getSize(); e++){
             lista->goToPos(e);
-         //   cout<<"Evaluando: "<<lista->getElement()->nodoDestino->numero<<endl;
             if((lista->getElement()->nodoDestino->numero==temp->numero-1)){
                 arista *aristemp=lista->remove();
                 lista->goToPos(0);
                 lista->insert(aristemp);
             }
-
         }
         for(int e=0; e<lista->getSize(); e++){
             lista->goToPos(e);
-         //   cout<<"Evaluando: "<<lista->getElement()->nodoDestino->numero<<endl;
             if((lista->getElement()->nodoDestino->numero==temp->numero+1)){
                 arista *aristemp=lista->remove();
                 lista->goToPos(1);
@@ -286,17 +279,14 @@ void reordenar(int x,int y){
 
         }for(int e=0; e<lista->getSize(); e++){
             lista->goToPos(e);
-         //   cout<<"Evaluando: "<<lista->getElement()->nodoDestino->numero<<endl;
             if((lista->getElement()->nodoDestino->numero==temp->numero-y)){
                 arista *aristemp=lista->remove();
                 lista->goToPos(2);
                 lista->insert(aristemp);
             }
-
         }
         for(int e=0; e<lista->getSize(); e++){
             lista->goToPos(e);
-         //   cout<<"Evaluando: "<<lista->getElement()->nodoDestino->numero<<endl;
             if((lista->getElement()->nodoDestino->numero==temp->numero+y)){
                 arista *aristemp=lista->remove();
                 lista->goToPos(3);
@@ -322,73 +312,49 @@ void reordenar(int x,int y){
     for(int i =0;i<(y*x*0.06);i++){
         int f=rand()%(x*y);
         listaNodos->goToPos(f);
-        if(!listaNodos->getElement()->getFruta()){
-           listaNodos->getElement()->fruta=true;
+        if(!listaNodos->getElement()->getFruta() ){
+           listaNodos->getElement()->setFruta(true);
         }
         else{i--;}
-
-
-
-
     }
 }
 void agregarAristasExtras(int x, int y){
     srand(time(NULL));
     int res=x*y;
-
     bool bandera;
     for(int i =0;i<(res*0.05)/2;i++){
-            bandera=false;
-            int num1 = rand()%x*y;
-
-            while(!bandera){
-                    if(num1==0){
-                            --i;
-                        break;
-                    }
-
-                if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=0&&num1%y!=1){
-                cout<<"Arista entreX "<<num1<<" "<<num1-1<<endl;
-                addArista(num1,num1-1,true);
-                bandera=true;
+        bandera=false;
+        int num1 = (rand()%x*y)/(((res*0.05)/2)-i);
+        while(!bandera){
+            if(num1<0||num1>res){
+                --i;
                 break;
-                }else{
-                    --num1;
-                }
-
             }
-
-
-
-     //   cout<<num1<<endl;
-
-
+            if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=0&&num1%y!=1){
+            addArista(num1,num1-1,true);
+            bandera=true;
+            break;
+            }else{
+                --num1;
+            }
+        }
     }
-
-
     for(int i =0;i<(res*0.05)/2;i++){
-            bandera=false;
-            int num1 = rand()%x*y;
-
-            while(!bandera){
-                    cout<<num1<<endl;
-                    if(num1==0){
-                            --i;
-                        break;
-                    }
-                    cout<<num1<<endl;
-
-                if(num1-y>x&&!existe(num1,num1-y)&&num1%y!=0){
-                cout<<"Arista entre "<<num1<<" "<<num1-1<<endl;
-
-                addArista(num1,num1-y,true);
-                bandera=true;
+        bandera=false;
+        int num1 = (rand()%x*y)/(((res*0.05)/2)-i);
+        while(!bandera){
+            if(num1<0||num1>res){
+                --i;
                 break;
-                }else{
-                    --num1;
-                }
-
             }
+            if(num1-y>x&&!existe(num1,num1-y)&&num1%y!=0){
+            addArista(num1,num1-y,true);
+            bandera=true;
+            break;
+            }else{
+                --num1;
+            }
+        }
     }
 }
 bool existe(int indice,int nodoActual){
@@ -483,19 +449,16 @@ void addArista(int indiceArista1, int indiceArista2,bool ambas){
 //Devuelve la ruta de dijkstra
 DLinkedList<Nodo> *getPath( int destino ){
     DLinkedList<Nodo> *listaTemporal=new DLinkedList<Nodo>();
-    cout<<"imprimiendo"<<endl;
-    listaNodos->goToPos(destino-1);
+    listaNodos->goToPos(destino);
     Nodo *temp=listaNodos->getElement();
-   // listaTemporal->append(temp);
-     while(temp!=NULL){
-            listaTemporal->append(temp);
-          cout<<temp->numero<<endl;
-          temp=temp->previo;
+    while(temp!=NULL){
+            cout<<temp->numero<<endl;
+        listaTemporal->append(temp);
+        temp=temp->previo;
 
-     }
-     return listaTemporal;
+    }
 
-
+    return listaTemporal;
 }
 
 //Prueba si se cumple que el peso actual del menor  mas el peso es mejor que el del adyacente
@@ -509,8 +472,9 @@ void relajacion( Nodo *actual , Nodo *adyacente , int peso ){
 }
 
 
-DLinkedList<Nodo> *dijkstra( int inicial ){
-    listaNodos->goToPos(0);
+DLinkedList<Nodo> *dijkstra( int destino){
+    cout<<"Salimos de: "<<destino<<endl;
+    listaNodos->goToPos(destino);
     listaNodos->getElement()->distancia=0;
     Q->insert( listaNodos->getElement() ); //Insertamos el vértice inicial en la Cola de Prioridad
     int peso;
@@ -524,7 +488,7 @@ DLinkedList<Nodo> *dijkstra( int inicial ){
           continue; //Si el vértice actual ya fue visitado entonces sigo sacando elementos de la cola
 
         }
-        act->visitado =true;         //se marca el actual como visitado
+        act->visitado =true; //se marca el actual como visitado
 
         for( int i = 0 ; i < act->listaAristas->getSize() ; i++ ){ //reviso sus adyacentes del vertice actual
 
@@ -539,8 +503,8 @@ DLinkedList<Nodo> *dijkstra( int inicial ){
             }
         }
     }
-    return getPath(30);   //Numero al cual qiero llegat
-    printf("\n");
+    cout<<"tamano lista"<<listaNodos->getSize()<<endl;
+    return getPath(listaNodos->getSize()-1); //Numero al cual qiero llegat
 }
 
 

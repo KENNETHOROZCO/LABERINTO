@@ -56,6 +56,9 @@ public:
     Nodo getSiguiente(){
         return *siguiente;
     }
+    bool getSalida(){
+        return salida;
+    }
     void setSiguiente(Nodo *pSiguiente){
         siguiente=pSiguiente;
     }

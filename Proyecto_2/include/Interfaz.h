@@ -20,7 +20,7 @@ private:
     int color;
     int maxx;
     int maxy;
-    int posx, posy,posAntX,posAntY;
+    int posx,posy,posAntX,posAntY;
 
 public:
     bool fin;
@@ -35,7 +35,7 @@ public:
     // INICIALIZACION DE MODO GRAFICO
     void crearVentana(int x,int y){
         initwindow(maxx, maxy);
-        setbkcolor(COLOR(0,102,102));// 255,255,102
+        setbkcolor(COLOR(0,0,0));// 255,255,102
         cleardevice();
         posx = x;
         posy = y;
@@ -101,9 +101,12 @@ public:
         //cuadro derecho
         nodo->listaAristas->goToPos(1);
         if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-            pintarCuadro(x+18,y-45);
-            pintarCuadro(x+18,y-15);
-            pintarCuadro(x+18,y+15);
+            if(!nodo->getSalida()){
+                cout<<nodo->getNumero()<<"num:"<<nodo->getSalida()<<endl;
+                pintarCuadro(x+18,y+15);
+                pintarCuadro(x+18,y-15);
+                pintarCuadro(x+18,y-45);
+            }
         }
         //cuadro arriba
         nodo->listaAristas->goToPos(2);
@@ -161,71 +164,89 @@ public:
             personaje.setPosicion(personaje.getPosicion()+dimensionY);
             posAntY=posy;
         }
-
     }
-
     //CAMBIA EL RUMBO Y LA POSICIÓN DEL PERSONAJE EN LA VENTANA
-    void desplazarPersonaje(string direccion, int angulo, Nodo *&nodo, int dimY){
-        if(angulo==personaje.getHead()){
+    void desplazarPersonaje(string direccion, int angulo,Grafo *&grafo){
+            personaje.setHeading(angulo);
+            Nodo *nodo=grafo->listaNodos->getElement();
             nodo->listaAristas->goToPos(0);
             if(direccion=="L" && nodo->listaAristas->getElement()->nodoDestino->numero!=0){
                 posx = (posx + (maxx - desplazar)) % maxx;
                 personaje.setX(posx);
-                //cambiarPosPersonaje(dimY);
             }
             nodo->listaAristas->goToPos(1);
-            if(direccion=="R" && nodo->listaAristas->getElement()->nodoDestino->numero !=0){
+            if(direccion=="R" && nodo->listaAristas->getElement()->nodoDestino->numero !=0||
+                nodo->getNumero()==(grafo->dimensionX*grafo->dimensionY)){
                 posx = (posx + desplazar) % maxx;
                 personaje.setX(posx);
-                //cambiarPosPersonaje(dimY);
             }
             nodo->listaAristas->goToPos(2);
             if(direccion=="U" && nodo->listaAristas->getElement()->nodoDestino->numero !=0){
                 posy = (posy + (maxy - desplazar)) % maxy;
                 personaje.setY(posy);
-                //cambiarPosPersonaje(dimY);
             }
             nodo->listaAristas->goToPos(3);
             if(direccion=="D" && nodo->listaAristas->getElement()->nodoDestino->numero !=0){
                 posy = (posy + desplazar) % maxy;
                 personaje.setY(posy);
-                //cambiarPosPersonaje(dimY);
             }
-
-        }
-        else{
-
-            personaje.setHeading(angulo);
-        }
-        cambiarPosPersonaje(dimY);
-        cout<<"x: "<<personaje.getX()<<"y:"<<personaje.getY()<<endl;
-        cout<<"x1: "<<posx<<"y1:"<<posy<<endl;
+        cambiarPosPersonaje(grafo->dimensionY);
     }
 
+    //guarda la ruta más corta de la posición del personaje
+    void pintarRutaCorta(Grafo *&grafo){
+        setfillstyle(SOLID_FILL,COLOR(102,102,0));
+        DLinkedList<Nodo> *ruta=grafo->dijkstra(personaje.getPosicion());
+        int xActual=personaje.getX()-10;
+        int yActual=personaje.getY()-15;
+        ruta->goToPos(ruta->getSize()-1);
+        int posActual=ruta->getElement()->numero;
+        cout<<"actual"<<posActual<<endl;
+        for(ruta->goToPos(ruta->getSize()-1);ruta->getPos()>=0;ruta->previous()){
+            Nodo *nodo=ruta->getElement();
+            if(nodo->getNumero()==posActual+1){
+                bar(xActual,yActual,xActual+60,yActual+30);
+                xActual+=60;}
+            else if(nodo->getNumero()==posActual-1){
+                bar(xActual,yActual,xActual-60,yActual+30);
+                xActual-=60;}
+            else if(nodo->getNumero()==posActual+grafo->dimensionY){
+                bar(xActual,yActual,xActual+27,yActual+60);
+                yActual+=60;}
+            else if(nodo->getNumero()==posActual-grafo->dimensionY){
+                bar(xActual,yActual,xActual+27,yActual-60);
+                yActual-=60;}
+                posActual=nodo->getNumero();
+            cout<<"pos actual "<<posActual<<endl;
+            if(ruta->getPos()==0){
+                break;
+            }
+        }
+    }
     //DETECTA SI UNA TECLA FUE SELECCIONADA Y VERIFICA CUAL FUE
     void teclaSeleccionada(int &tecla, Grafo *&grafo){
         int flecha;
         grafo->listaNodos->goToPos(personaje.getPosicion());
         cout<<"pos"<<personaje.getPosicion()<<endl;
-        Nodo *nodo=grafo->listaNodos->getElement();
+        //Nodo *nodo=grafo->listaNodos->getElement();
         switch(tecla){
             case 0:
                 flecha=getch();
                 switch(flecha){
                     case KEY_UP: // HACIA ARRIBA
-                        desplazarPersonaje("U",90,nodo,grafo->dimensionY);
+                        desplazarPersonaje("U",90,grafo);
                         break;
                     case KEY_LEFT: // HACIA LA IZQUIERDA
-                        desplazarPersonaje("L",180,nodo,grafo->dimensionY);
+                        desplazarPersonaje("L",180,grafo);
                         break;
                     case KEY_RIGHT: // HACIA LA DERECHA
-                        desplazarPersonaje("R",0,nodo,grafo->dimensionY);
+                        desplazarPersonaje("R",0,grafo);
                         break;
                     case KEY_DOWN: // HACIA ABAJO
-                        desplazarPersonaje("D",270,nodo,grafo->dimensionY);
+                        desplazarPersonaje("D",270,grafo);
                         break;
                     case KEY_END:
-                        personaje.setAyuda(true);
+                        pintarRutaCorta(grafo);
                         break;
                 }break;
             case 27: // TECLA ESC
@@ -233,7 +254,6 @@ public:
                     break;
         }
     }
-
     //MUEVE AL PERSONAJE CONFORME ES PRESIONADA UNA TECLA
     void mover(Grafo *&grafo){
         int tecla;
@@ -275,7 +295,6 @@ public:
                     Sleep(1);
                     outtextxy(maxx-x, maxy-y, "          ");
                     Sleep(999);
-
                 }
             }
         }

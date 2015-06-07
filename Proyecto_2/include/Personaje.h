@@ -192,7 +192,7 @@ void DPersonaje1(int pintar){
         }
     }
     else{
-       setfillstyle(SOLID_FILL,COLOR(0,102,102));
+       setfillstyle(SOLID_FILL,COLOR(0,0,0));
        bar(x-(2*tam),y,x+15,y+25);
     }
 }
