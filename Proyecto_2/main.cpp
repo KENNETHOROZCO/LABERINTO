@@ -90,8 +90,6 @@ void crearVentana(void * aArg){
     iniciarJuego();
 }
 
-
-
 void inicioHilos(){
     thread t(cronometro, 0);
     thread t2(crearVentana,0);

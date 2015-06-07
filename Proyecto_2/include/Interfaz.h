@@ -58,9 +58,8 @@ public:
     int getMaxY(){
         return maxy;
     }
-    // DIBUJA O BORRA UNA FRUTA EN LA POSICIóN X, Y RECIBIDAS
-    void dibujarGifs(bool pintar,int x, int y){
-        if(pintar==true){
+    // DIBUJA O BORRA UNA FRUTA EN LA POSICIÓN X, Y RECIBIDAS
+    void dibujarGifs(int x, int y){
             setlinestyle(6,1,3);
             setfillstyle(1,COLOR(255,0,0));
             setcolor(COLOR(255,0,0));
@@ -72,9 +71,6 @@ public:
             line(x+2,y-11,x-2,y-12);
             setcolor(COLOR(255,255,255));
             fillellipse(x+7,y-4,2,2);
-        }
-        else{
-            setfillstyle(2,COLOR(0,0,0));}
     }
 
     //VERIFICA SI EL PERSONAJE TOMO O NO UNA FRUTA
@@ -152,7 +148,7 @@ public:
             const char * c = ((string)time).c_str();
             outtextxy(x,y,c);
             if(nodo->getFruta()){
-                dibujarGifs(true,x,y);
+                dibujarGifs(x,y);
             }
             x+=desplazar;
             if((i+1)%grafo->dimensionY==0 && i!=0){
@@ -214,8 +210,6 @@ public:
 
     //guarda la ruta más corta de la posición del personaje
     void pintarRutaCorta(Grafo *grafo,int pintar){
-        if(pintar){setfillstyle(SOLID_FILL,COLOR(255,0,255));}
-        else{setfillstyle(SOLID_FILL,COLOR(0,0,0));}
         DLinkedList<Nodo> *ruta=grafo->dijkstra(personaje.getPosicion());
         int xActual=personaje.getX()-10;
         int yActual=personaje.getY()-15;
@@ -223,18 +217,24 @@ public:
         int posActual=ruta->getElement()->numero;
         cout<<"actual"<<posActual<<endl;
         for(ruta->goToPos(ruta->getSize()-1);ruta->getPos()>=0;ruta->previous()){
+            if(pintar){setfillstyle(SOLID_FILL,COLOR(255,0,255));}
+            else{setfillstyle(SOLID_FILL,COLOR(0,0,0));}
             Nodo *nodo=ruta->getElement();
             if(nodo->getNumero()==posActual+1){
                 bar(xActual,yActual,xActual+60,yActual+30);
+                //if(nodo->getFruta())dibujarGifs(xActual+10,yActual+15);
                 xActual+=60;}
-            else if(nodo->getNumero()==posActual-1){
-                bar(xActual+28,yActual,xActual-60,yActual+30);
+            if(nodo->getNumero()==posActual-1){
+                bar(xActual+28,yActual,xActual-35,yActual+30);
+                //if(nodo->getFruta())dibujarGifs(xActual+10,yActual+15);
                 xActual-=60;}
-            else if(nodo->getNumero()==posActual+grafo->dimensionY){
+            if(nodo->getNumero()==posActual+grafo->dimensionY){
                 bar(xActual,yActual,xActual+27,yActual+60);
+                //if(nodo->getFruta())dibujarGifs(xActual+12,yActual+15);
                 yActual+=60;}
-            else if(nodo->getNumero()==posActual-grafo->dimensionY){
-                bar(xActual,yActual+29,xActual+27,yActual-60);
+            if(nodo->getNumero()==posActual-grafo->dimensionY){
+                bar(xActual,yActual+30,xActual+27,yActual-30);
+                //if(nodo->getFruta())dibujarGifs(xActual+12,yActual+15);
                 yActual-=60;}
                 posActual=nodo->getNumero();
             cout<<"pos actual "<<posActual<<endl;
