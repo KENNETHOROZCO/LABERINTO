@@ -16,141 +16,213 @@ using namespace std;
 class Interfaz
 {
 private:
-    int desplazar=4;// CANTIDAD DE ESPACIOS QUE SE VA A MOVER EL PERSONAJE
+    int desplazar;// CANTIDAD DE ESPACIOS QUE SE VA A MOVER EL PERSONAJE
     int color;
-    int maxx = 900;
-    int maxy = 700;
-    int posx, posy;
+    int maxx;
+    int maxy;
+    int posx, posy,posAntX,posAntY;
 
 public:
-    bool fin = true;
+    bool fin;
     Personaje personaje;
-    Interfaz() {}
+    Interfaz() { //constructor
+    fin = true;
+    desplazar=60;
+    maxx = 900;
+    maxy = 740;
+    }
     virtual ~Interfaz() {}
-
-    void crearVentana(){
-        // INICIALIZACION DE MODO GRAFICO
+    // INICIALIZACION DE MODO GRAFICO
+    void crearVentana(int x,int y){
         initwindow(maxx, maxy);
-        setbkcolor(COLOR(200,165,20));
+        setbkcolor(COLOR(0,102,102));// 255,255,102
         cleardevice();
-        posx = 460;
-        posy = 360;
+        posx = x;
+        posy = y;
+        posAntX=x;
+        posAntY=y;
         personaje.setPos(posx,posy);
     }
 
+    // DIBUJA O BORRA UNA FRUTA EN LA POSICIóN X, Y RECIBIDAS
     void dibujarGifs(bool pintar,int x, int y){
         if(pintar==true){
             setlinestyle(6,1,3);
             setfillstyle(1,COLOR(255,0,0));
             setcolor(COLOR(255,0,0));
-            fillellipse(x-6,y,7,9);
-            fillellipse(x+2,y,7,9);
+            fillellipse(x-1,y,6,8);
+            fillellipse(x+6,y,6,8);
             setcolor(COLOR(0,255,0));
             setlinestyle(1,0,2);
-            line(x-3,y-8,x-4,y-12);
-            line(x-4,y-12,x-8,y-12);
+            line(x+3,y-8,x+2,y-12);
+            line(x+2,y-11,x-2,y-12);
             setcolor(COLOR(255,255,255));
-            fillellipse(x+3,y-4,2,2);
+            fillellipse(x+7,y-4,2,2);
         }
         else{
             setfillstyle(2,COLOR(0,0,0));}
     }
-    void recogerGifs(){
-        if(personaje.getX()==100 && personaje.getY()==100){personaje.setGifs(1);}
-        if(personaje.getX()==250 && personaje.getY()==250){personaje.setGifs(1);}
-        if(personaje.getX()==600 && personaje.getY()==600){personaje.setGifs(1);}
-        if(personaje.getX()==400 && personaje.getY()==400){personaje.setGifs(1);}
+
+    //VERIFICA SI EL PERSONAJE TOMO O NO UNA FRUTA
+    void recogerGifs(Nodo *&nodo){
+        if(nodo->getFruta()==true){
+            personaje.setGifs(1);
+            nodo->setFruta(false);
+            //dibujarGifs(false,personaje.getX(),personaje.getY());
+        }
     }
 
-    //pinta un cuadro desde las dimensiones x,y
+    //PINTA UN CUADRO DESDE LAS DIMENSIONES X,Y RECIBIDAS
     void pintarCuadro(int x, int y){
         setlinestyle(6,1,2);
-        setcolor(COLOR(102,51,0));
-        rectangle(x,y,x+15,y+13);
-        rectangle(x+15,y,x+25,y+13);
-        rectangle(x,y+13,x+10,y+25);
-        rectangle(x+10,y+13,x+25,y+25);
-        setfillstyle(SOLID_FILL,COLOR(255,153,51));
-        bar(x+1,y+1,x+14,y+12);
-        bar(x+16,y+1,x+24,y+12);
-        bar(x+1,y+14,x+9,y+24);
-        bar(x+11,y+14,x+24,y+24);
+        setcolor(COLOR(255,153,51));
+        rectangle(x,y,x+21,y+15);
+        rectangle(x+20,y,x+30,y+15);
+        rectangle(x,y+15,x+10,y+30);
+        rectangle(x+10,y+15,x+30,y+30);
+        setfillstyle(SOLID_FILL,COLOR(102,51,0));//255,153,51
+        bar(x+1,y+1,x+19,y+14);
+        bar(x+21,y+1,x+29,y+14);
+        bar(x+1,y+16,x+9,y+29);
+        bar(x+11,y+16,x+29,y+29);
 
     }
 
-    void pared(Nodo *nodo,int nivel){
-        int x=480-(nivel*20);
-        int y=380-(nivel*20);
+    //RECIBE UN NODO Y PINTA UNA PARED EN LAS DIRECCIONES
+    //DONDE NO HAY CAMINO PARA MOVERSE
+    void pared(Nodo *nodo,int nivel,int x,int y){
+        //cuadro izquierdo
         nodo->listaAristas->goToPos(0);
-        //line(x,y,x+2,y+2);
         if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-            pintarCuadro(x-45,y-10);
+            pintarCuadro(x-42,y-16);
+            pintarCuadro(x-42,y-45);
+            pintarCuadro(x-42,y+15);
         }
+        //cuadro derecho
         nodo->listaAristas->goToPos(1);
         if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-            pintarCuadro(x+20,y-10);
+            pintarCuadro(x+18,y-45);
+            pintarCuadro(x+18,y-15);
+            pintarCuadro(x+18,y+15);
         }
+        //cuadro arriba
         nodo->listaAristas->goToPos(2);
         if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-            pintarCuadro(x-9,y-40);
+            pintarCuadro(x-42,y-45);
+            pintarCuadro(x-12,y-45);
+            pintarCuadro(x+18,y-45);
         }
+        //cuadro abajo
         nodo->listaAristas->goToPos(3);
         if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-            pintarCuadro(x-10,y+20);
+            pintarCuadro(x-42,y+15);
+            pintarCuadro(x-12,y+15);
+            pintarCuadro(x+18,y+15);
         }
     }
+
+    //RECIBE EL GRAFO Y LA REPRESENTA EN MODO GRAFICO
     void pintarGrafo(Grafo *&grafo,int nivel){
-        int x=480-(nivel*20);
-        int y=380-(nivel*20);
+        int x=personaje.getX();//-(nivel*20);
+        int y=personaje.getY();//-(nivel*20);
         grafo->listaNodos->goToStart();
         for(int i=0;i<grafo->listaNodos->getSize();i++){
             Nodo *nodo=grafo->listaNodos->getElement();
-            nodo->listaAristas->goToPos(0);
-            if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-                pintarCuadro(x-40,y);
+            pared(nodo,nivel,x,y);
+            //outtextxy(x,y,"p");
+            if(nodo->getFruta()){
+                dibujarGifs(true,x,y);
             }
-            nodo->listaAristas->goToPos(1);
-            if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-                pintarCuadro(x+20,y);
-            }
-            nodo->listaAristas->goToPos(2);
-            if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-                pintarCuadro(x-20,y-40);
-            }
-            nodo->listaAristas->goToPos(3);
-            if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
-                pintarCuadro(x,y+20);
-            }
-            x+=40;
-            if(i%grafo->dimensionY==0){
-                y+=40;
+            x+=desplazar;
+            if((i+1)%grafo->dimensionY==0 && i!=0){
+                x=personaje.getX();//-(nivel*20);
+                y+=desplazar;
             }
             grafo->listaNodos->next();
         }
     }
 
-    void dezplazarPersonaje(string direccion){
+    // CAMBIA LA POSICION DEL NODO DONDE SE ENCUENTRA EL PERSONAJE
+    void cambiarPosPersonaje(int &dimensionY){
+        int des=desplazar;
+        if(posx==posAntX+des){
+            personaje.setPosicion(personaje.getPosicion()+1);
+            posAntX=posx;
+        }
+        else if(posx==posAntX-des){
+            personaje.setPosicion(personaje.getPosicion()-1);
+            posAntX=posx;
+        }
+        else if(posy==posAntY-des){
+            personaje.setPosicion(personaje.getPosicion()-dimensionY);
+            posAntY=posy;
+        }
+        else if(posy==posAntY+des){
+            personaje.setPosicion(personaje.getPosicion()+dimensionY);
+            posAntY=posy;
+        }
 
     }
 
-    void teclaSeleccionada(int &tecla){
+    //CAMBIA EL RUMBO Y LA POSICIÓN DEL PERSONAJE EN LA VENTANA
+    void desplazarPersonaje(string direccion, int angulo, Nodo *&nodo, int dimY){
+        if(angulo==personaje.getHead()){
+            nodo->listaAristas->goToPos(0);
+            if(direccion=="L" && nodo->listaAristas->getElement()->nodoDestino->numero!=0){
+                posx = (posx + (maxx - desplazar)) % maxx;
+                personaje.setX(posx);
+                //cambiarPosPersonaje(dimY);
+            }
+            nodo->listaAristas->goToPos(1);
+            if(direccion=="R" && nodo->listaAristas->getElement()->nodoDestino->numero !=0){
+                posx = (posx + desplazar) % maxx;
+                personaje.setX(posx);
+                //cambiarPosPersonaje(dimY);
+            }
+            nodo->listaAristas->goToPos(2);
+            if(direccion=="U" && nodo->listaAristas->getElement()->nodoDestino->numero !=0){
+                posy = (posy + (maxy - desplazar)) % maxy;
+                personaje.setY(posy);
+                //cambiarPosPersonaje(dimY);
+            }
+            nodo->listaAristas->goToPos(3);
+            if(direccion=="D" && nodo->listaAristas->getElement()->nodoDestino->numero !=0){
+                posy = (posy + desplazar) % maxy;
+                personaje.setY(posy);
+                //cambiarPosPersonaje(dimY);
+            }
+
+        }
+        else{
+
+            personaje.setHeading(angulo);
+        }
+        cambiarPosPersonaje(dimY);
+        cout<<"x: "<<personaje.getX()<<"y:"<<personaje.getY()<<endl;
+        cout<<"x1: "<<posx<<"y1:"<<posy<<endl;
+    }
+
+    //DETECTA SI UNA TECLA FUE SELECCIONADA Y VERIFICA CUAL FUE
+    void teclaSeleccionada(int &tecla, Grafo *&grafo){
         int flecha;
-        //personaje.setAyuda(false);
+        grafo->listaNodos->goToPos(personaje.getPosicion());
+        cout<<"pos"<<personaje.getPosicion()<<endl;
+        Nodo *nodo=grafo->listaNodos->getElement();
         switch(tecla){
             case 0:
                 flecha=getch();
                 switch(flecha){
                     case KEY_UP: // HACIA ARRIBA
-                        posy = (posy + (maxy - desplazar)) % maxy;personaje.setHeading(90);
+                        desplazarPersonaje("U",90,nodo,grafo->dimensionY);
                         break;
                     case KEY_LEFT: // HACIA LA IZQUIERDA
-                        posx = (posx + (maxx - desplazar)) % maxx;personaje.setHeading(180);
+                        desplazarPersonaje("L",180,nodo,grafo->dimensionY);
                         break;
                     case KEY_RIGHT: // HACIA LA DERECHA
-                        posx = (posx + desplazar) % maxx;personaje.setHeading(0);
+                        desplazarPersonaje("R",0,nodo,grafo->dimensionY);
                         break;
                     case KEY_DOWN: // HACIA ABAJO
-                        posy = (posy + desplazar) % maxy;personaje.setHeading(270);
+                        desplazarPersonaje("D",270,nodo,grafo->dimensionY);
                         break;
                     case KEY_END:
                         personaje.setAyuda(true);
@@ -161,23 +233,21 @@ public:
                     break;
         }
     }
-    void mover(){
+
+    //MUEVE AL PERSONAJE CONFORME ES PRESIONADA UNA TECLA
+    void mover(Grafo *&grafo){
         int tecla;
-        /*dibujarGifs(true,200,200);
-        dibujarGifs(true,100,100);
-        dibujarGifs(true,250,250);
-        dibujarGifs(true,600,600);
-        dibujarGifs(true,400,400);*/
-        //personaje.setPos(posx,posy);
-        personaje.DPersonaje(0); //PINTA EL PERSONAJE
+        personaje.DPersonaje1(0); //PINTA EL PERSONAJE
         tecla = getch();// GUARDA LA TECLA SELECCIONADA
-        personaje.DPersonaje(1);//BORRA EL PERSONAJE
-        personaje.setPos(posx,posy);
-        recogerGifs();// REVISA SI PASO POR UN GIF
+        personaje.DPersonaje1(1);//BORRA EL PERSONAJE
+        grafo->listaNodos->goToPos(personaje.getPosicion());
+        Nodo *nodo=grafo->listaNodos->getElement();
+        recogerGifs(nodo);// REVISA SI PASO POR UN GIF
         cout<<"GIFS: "<<personaje.getGifs()<<endl;
-        teclaSeleccionada(tecla);//REVISA QUE FLECHA FUE SELECCIONADA
+        teclaSeleccionada(tecla,grafo);//REVISA QUE FLECHA FUE SELECCIONADA
     }
 
+    //REPRESENTA EN MODO GRAFICO EL TIEMPO RECIBIDO
     void tiempoA(int &tiempo){
         int x=100;
         int y=55;
@@ -196,14 +266,14 @@ public:
                     setcolor(COLOR(255,0,0));
                     outtextxy(maxx-x, maxy-y, cronometro);
                     Sleep(300);
-                    outtextxy(maxx-x, maxy-y, "        ");
+                    outtextxy(maxx-x, maxy-y, "          ");
                     Sleep(900);
                 }
                 else{
                     setcolor(COLOR(102,51,0));
                     outtextxy(maxx-x, maxy-y, cronometro);
                     Sleep(1);
-                    outtextxy(maxx-x, maxy-y, "        ");
+                    outtextxy(maxx-x, maxy-y, "          ");
                     Sleep(999);
 
                 }

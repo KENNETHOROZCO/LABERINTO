@@ -35,7 +35,7 @@ public:
         extraTime=0;
         gifs=0;
         puntaje=0;
-        posicion=1;
+        posicion=0;
         ayuda=false;
     }
     void home1(){
@@ -117,7 +117,7 @@ public:
     //dibuja la tortuga
 void DPersonaje(int b){
     setlinestyle(6,1,3);
-    if(b==1){RT=200;GT=165;BT=20;}//200,165,20
+    if(b==1){RT=0;GT=102;BT=102;}//200,165,20
     else{RT=0;GT=255;BT=0;}
     setcolor(COLOR(RT,GT,BT));
     //cuerpo
@@ -147,13 +147,54 @@ void DPersonaje(int b){
     int y6=sin((rumbo5*M_PI)/180)*12;//18
     fillellipse(ejeX+x6,ejeY+y6,2,2);
     if(b==0){
-       setfillstyle(INTERLEAVE_FILL,COLOR(0,153,76));
+       setfillstyle(INTERLEAVE_FILL,COLOR(0,102,102));
     }
     else{
         setfillstyle(HATCH_FILL,COLOR(RT,GT,BT));//100 51 25
     }
     fillellipse(ejeX,ejeY,7,7);
 
+}
+
+void DPersonaje1(int pintar){
+    int tam=3;
+    int x=ejeX-2;
+    int y=ejeY-12;
+    if(pintar==0){
+        setfillstyle(SOLID_FILL,COLOR(0,255,0));
+        int a=x,b=y;
+        for (int i=0;i<3;i++){
+            bar(a,b,a+tam,b+tam);
+            a+=tam;
+        }
+        a=x-tam;
+        b+=tam;
+        for(int i=0;i<5;i++){
+            bar(a,b,a+tam,b+tam);
+            a+=tam;
+        }
+        a=x-(2*tam);
+        b+=tam;
+        bar(a,b,a+(7*tam),b+(5*tam));
+        setfillstyle(SOLID_FILL,COLOR(255,255,255));
+        bar(a+tam,b,a+(3*tam),b+4);
+        bar(a+tam,b+4,a+(2*tam),b+8);
+        bar(a+(4*tam),b,a+(6*tam),b+4);
+        bar(a+(4*tam),b+4,a+(5*tam),b+8);
+        setfillstyle(SOLID_FILL,COLOR(0,0,0));
+        bar(a+(2*tam),b+4,a+(3*tam),b+8);
+        bar(a+(5*tam),b+4,a+(6*tam),b+8);
+        setfillstyle(SOLID_FILL,COLOR(0,255,0));
+        b+=(5*tam);
+        for(int i=0;i<4;i++){
+            bar(a,b,a+tam,b+tam);
+            a+=(2*tam);
+        }
+    }
+    else{
+       setfillstyle(SOLID_FILL,COLOR(0,102,102));
+       bar(x-(2*tam),y,x+15,y+25);
+    }
 }
 
 };

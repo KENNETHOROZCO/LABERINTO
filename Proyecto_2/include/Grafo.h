@@ -6,6 +6,7 @@
 #include<DLinkedList.h>
 #include<stdlib.h>
 #include<time.h>
+#include<MinHeap.h>
 
 using namespace std;
 
@@ -20,11 +21,13 @@ class Grafo
 {
 
 public:
+    MinHeap *Q;
     DLinkedList<Nodo> *listaNodos;
     Nodo *principal;
-    int dimensionX=0;
-    int dimensionY=0;
+    int dimensionX;
+    int dimensionY;
 Grafo(){
+    Q=new MinHeap();
     principal= NULL;
     listaNodos=new DLinkedList<Nodo>();
 }
@@ -233,48 +236,73 @@ bool existe(int indice, DLinkedList<arista> *lista){
         return false;
     }
 
+void anadirVacio(int indice, int posicion){
+    for(int i=0;i<listaNodos->getSize();i++){
+        listaNodos->goToPos(i);
+        if(listaNodos->getElement()->numero==indice){
+            Nodo *temp=listaNodos->getElement();
+            arista *nuevaArista=new struct arista;
+            nuevaArista->nodoDestino=new Nodo(0);
+            temp->listaAristas->goToPos(posicion);
+            temp->listaAristas->insert(nuevaArista);
+        }
+    }
+}
+
 void reordenar(int x,int y){
     listaNodos->goToStart();
     for(int i =0; i<listaNodos->getSize()+1; i++){
         Nodo *temp=listaNodos->getElement();
         DLinkedList<arista> *lista=temp->listaAristas;
         for(int e=0; 4>lista->getSize(); e++){
-            anadirVacio(temp->numero);
+            anadirVacio(temp->numero,0);
         }
         listaNodos->goToPos(i);
     }
     listaNodos->goToStart();
-    for(int i=0; i<listaNodos->getSize(); i++){
-        bool bandera=false;
+    for(int i=0; i<listaNodos->getSize()+1; i++){
+        //bool bandera=false;
         Nodo *temp=listaNodos->getElement();
         DLinkedList<arista> *lista=temp->listaAristas;
         lista->goToStart();
         for(int e=0; e<lista->getSize(); e++){
             lista->goToPos(e);
-            if(lista->getElement()->nodoDestino->numero==temp->numero-1){
+         //   cout<<"Evaluando: "<<lista->getElement()->nodoDestino->numero<<endl;
+            if((lista->getElement()->nodoDestino->numero==temp->numero-1)){
                 arista *aristemp=lista->remove();
                 lista->goToPos(0);
                 lista->insert(aristemp);
             }
+
+        }
+        for(int e=0; e<lista->getSize(); e++){
             lista->goToPos(e);
-            if(lista->getElement()->nodoDestino->numero==temp->numero+1){
+         //   cout<<"Evaluando: "<<lista->getElement()->nodoDestino->numero<<endl;
+            if((lista->getElement()->nodoDestino->numero==temp->numero+1)){
                 arista *aristemp=lista->remove();
                 lista->goToPos(1);
                 lista->insert(aristemp);
             }
+
+        }for(int e=0; e<lista->getSize(); e++){
             lista->goToPos(e);
-            if(lista->getElement()->nodoDestino->numero==temp->numero-y){
+         //   cout<<"Evaluando: "<<lista->getElement()->nodoDestino->numero<<endl;
+            if((lista->getElement()->nodoDestino->numero==temp->numero-y)){
                 arista *aristemp=lista->remove();
                 lista->goToPos(2);
                 lista->insert(aristemp);
             }
+
+        }
+        for(int e=0; e<lista->getSize(); e++){
             lista->goToPos(e);
-            if(lista->getElement()->nodoDestino->numero==temp->numero+y){
+         //   cout<<"Evaluando: "<<lista->getElement()->nodoDestino->numero<<endl;
+            if((lista->getElement()->nodoDestino->numero==temp->numero+y)){
                 arista *aristemp=lista->remove();
                 lista->goToPos(3);
                 lista->insert(aristemp);
             }
-            lista->goToPos(e);
+
         }
         listaNodos->goToPos(i);
     }
@@ -290,50 +318,89 @@ void reordenar(int x,int y){
             }
         }
     }
+    srand(time(NULL));
+    for(int i =0;i<(y*x*0.06);i++){
+        int f=rand()%(x*y);
+        listaNodos->goToPos(f);
+        if(!listaNodos->getElement()->getFruta()){
+           listaNodos->getElement()->fruta=true;
+        }
+        else{i--;}
+
+
+
+
+    }
 }
 void agregarAristasExtras(int x, int y){
     srand(time(NULL));
     int res=x*y;
-    for(int i =0;i<(res*0.05);i++){
-        int num1 = rand()%x*y;
-        int num2 = rand()%x*y;
-        if(num1!=0||num2!=0){
-            if(num2-1>0&&num2%y!=1){
-                if(existe(num2)&&existe(num2-1)){
-                    addArista(num2,num2-1,true);
-                }
-                else{
-                    i--;
-                }
-            }
-        }
-    }
+
+    bool bandera;
     for(int i =0;i<(res*0.05)/2;i++){
-        int num1 = rand()%x*y;
-        int num2 = rand()%x*y;
-        if(num1-y>0){
-            if(existe(num1)&&existe(num1-y)){
-               addArista(num1,num1-y,true);
+            bandera=false;
+            int num1 = rand()%x*y;
+
+            while(!bandera){
+                    if(num1==0){
+                            --i;
+                        break;
+                    }
+
+                if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=0&&num1%y!=1){
+                cout<<"Arista entreX "<<num1<<" "<<num1-1<<endl;
+                addArista(num1,num1-1,true);
+                bandera=true;
+                break;
+                }else{
+                    --num1;
+                }
+
             }
-            else{
-                i--;
+
+
+
+     //   cout<<num1<<endl;
+
+
+    }
+
+
+    for(int i =0;i<(res*0.05)/2;i++){
+            bandera=false;
+            int num1 = rand()%x*y;
+
+            while(!bandera){
+                    cout<<num1<<endl;
+                    if(num1==0){
+                            --i;
+                        break;
+                    }
+                    cout<<num1<<endl;
+
+                if(num1-y>x&&!existe(num1,num1-y)&&num1%y!=0){
+                cout<<"Arista entre "<<num1<<" "<<num1-1<<endl;
+
+                addArista(num1,num1-y,true);
+                bandera=true;
+                break;
+                }else{
+                    --num1;
+                }
+
             }
-        }
     }
 }
-bool existe(int indice){
-    for(int i =0;i<listaNodos->getSize();i++){
-        if(indice==listaNodos->getElement()->numero==indice){
+bool existe(int indice,int nodoActual){
+    listaNodos->goToPos(nodoActual);
+
+    for(int i =0;i<listaNodos->getElement()->listaAristas->getSize();i++){
+        listaNodos->getElement()->listaAristas->goToPos(i);
+        if(indice==listaNodos->getElement()->listaAristas->getElement()->nodoDestino->numero){
             return true;
         }
     }
     return false;
-}
-
-void montarCuadricula(int x, int y){
-    for(int i=(x-1)*y+1;i<x*y+1;i++){
-        anadirVacio(i);
-    }
 }
 
 void acomodarLista(){
@@ -356,12 +423,11 @@ void setPrincipal(Nodo *pPrincipal){
     funcion utilizada para eliminar una arista
 ---------------------------------------------------------------------*/
 void eliminar_arista(int inicio, int fin){
-    Nodo *aux;
     Nodo *aux2;
     for(int i =0;i<listaNodos->getSize();i++){
         listaNodos->goToPos(i);
         if(listaNodos->getElement()->numero==fin){
-            aux=listaNodos->getElement();
+            aux2=listaNodos->getElement();
         }
     }
     for(int i =0;i<listaNodos->getSize();i++){
@@ -373,7 +439,7 @@ void eliminar_arista(int inicio, int fin){
     for(int i=0;aux2->listaAristas->getSize()>i;i++){
         aux2->listaAristas->goToPos(i);
         if(aux2->listaAristas->getElement()->nodoDestino->numero==fin+1){
-            arista *temp=aux2->listaAristas->remove();
+            aux2->listaAristas->remove();
         }
     }
 }
@@ -413,22 +479,72 @@ void addArista(int indiceArista1, int indiceArista2,bool ambas){
     }
 }
 
-void anadirVacio(int indice){
-    for(int i=0;i<listaNodos->getSize();i++){
-        listaNodos->goToPos(i);
-        if(listaNodos->getElement()->numero==indice){
-            Nodo *temp=listaNodos->getElement();
-            arista *nuevaArista=new struct arista;
-            nuevaArista->nodoDestino=new Nodo(0);
-            temp->listaAristas->append(nuevaArista);
-        }
+
+//Devuelve la ruta de dijkstra
+DLinkedList<Nodo> *getPath( int destino ){
+    DLinkedList<Nodo> *listaTemporal=new DLinkedList<Nodo>();
+    cout<<"imprimiendo"<<endl;
+    listaNodos->goToPos(destino-1);
+    Nodo *temp=listaNodos->getElement();
+   // listaTemporal->append(temp);
+     while(temp!=NULL){
+            listaTemporal->append(temp);
+          cout<<temp->numero<<endl;
+          temp=temp->previo;
+
+     }
+     return listaTemporal;
+
+
+}
+
+//Prueba si se cumple que el peso actual del menor  mas el peso es mejor que el del adyacente
+void relajacion( Nodo *actual , Nodo *adyacente , int peso ){
+    //Si la distancia del origen al vertice actual + peso de su arista es menor a la distancia del origen al vertice adyacente
+    if( actual->distancia + peso < adyacente->distancia ){
+        adyacente->distancia = actual->distancia + peso;
+        adyacente->previo = actual;
+        Q->insert(adyacente);
     }
 }
 
-void addVacio(int nodo1,int nodo2){
-    anadirVacio(nodo1);
-    anadirVacio(nodo2);
+
+DLinkedList<Nodo> *dijkstra( int inicial ){
+    listaNodos->goToPos(0);
+    listaNodos->getElement()->distancia=0;
+    Q->insert( listaNodos->getElement() ); //Insertamos el vértice inicial en la Cola de Prioridad
+    int peso;
+    Nodo *act;
+    Nodo *ad;
+    while( Q->getSize()!=0 ){                   //Mientras cola no este vacia
+
+        act = Q->removeFirst() ;
+
+        if( act->visitado ){
+          continue; //Si el vértice actual ya fue visitado entonces sigo sacando elementos de la cola
+
+        }
+        act->visitado =true;         //se marca el actual como visitado
+
+        for( int i = 0 ; i < act->listaAristas->getSize() ; i++ ){ //reviso sus adyacentes del vertice actual
+
+
+            act->listaAristas->goToPos(i);
+
+            ad = act->listaAristas->getElement()->nodoDestino;   //id del vertice adyacente
+            peso = 1;        //peso de la arista que une actual con adyacente ( actual , adyacente )
+            if( !ad->visitado ){        //si el vertice adyacente no fue visitado
+                relajacion( act , ad , peso ); //realizamos el paso de relajacion
+
+            }
+        }
+    }
+    return getPath(30);   //Numero al cual qiero llegat
+    printf("\n");
 }
+
+
+
 };
 
 #endif // GRAFO_H

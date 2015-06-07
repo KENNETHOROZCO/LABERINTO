@@ -14,6 +14,8 @@ struct arista{
 class Nodo{
 
 public:
+    Nodo *previo;
+    int distancia;
     bool entrada;
     bool fruta;
     bool salida;
@@ -32,6 +34,8 @@ public:
         fruta=false;
         salida=false;
         entrada=false;
+        previo=NULL;
+        distancia=9999999;
     }
     void setEstrada(bool p){
         entrada=p;
@@ -41,6 +45,9 @@ public:
     }
     void setSalida(bool p){
         salida=p;
+    }
+    bool getFruta(){
+        return fruta;
     }
     int getNumero(){
         return numero;

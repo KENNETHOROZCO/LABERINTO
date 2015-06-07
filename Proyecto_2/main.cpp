@@ -24,8 +24,10 @@ using namespace tthread;
 Interfaz VInterfaz;
 Grafo *grafo = new Grafo();
 int segundos;
-int nivel=1;
+int nivel=7;
 int ayuda=0;
+int filas=4;
+int columnas=5;
 thread t;
 thread t2;
 void cronometro(void * aArg);
@@ -45,7 +47,7 @@ void iniciarCuenta(){
 }
 
 void setTiempo(){
-    segundos=((nivel/3)+3)*10;
+    segundos=((nivel/3)+3)*40;
     segundos+=VInterfaz.personaje.getExtraTime()+1;
     segundos-=ayuda;
 }
@@ -58,25 +60,26 @@ void cronometro(void * aArg){
 }
 
 
-void crearVentana(void * aArg){
-    VInterfaz.crearVentana();
-    grafo->listaNodos->goToPos(10);
-    VInterfaz.pared(grafo->listaNodos->getElement(),nivel);
-    //VInterfaz.pintarGrafo(grafo,nivel);
-    /*VInterfaz.pintarCuadro(350,420);
-    VInterfaz.pintarCuadro(370,420);
-    VInterfaz.pintarCuadro(390,420);
-    cout<<"Creando ventanas"<<endl;
-    VInterfaz.dibujarGifs(true,200,200);
-    VInterfaz.dibujarGifs(true,100,100);
-    VInterfaz.dibujarGifs(true,250,250);
-    VInterfaz.dibujarGifs(true,600,600);
-    VInterfaz.dibujarGifs(true,400,400);*/
-    VInterfaz.personaje.DPersonaje(0);
-    VInterfaz.personaje.DPersonaje(1);
+void iniciarJuego(){
+    int x=320-(nivel*30);
+    int y=250-(nivel*30);
+    if(x<=60){
+        x=60;
+    }
+    if(y<=60){
+        y=60;
+    }
+    VInterfaz.crearVentana(x,y);
+    grafo->arbol(filas+nivel,columnas+nivel);
+    VInterfaz.pintarGrafo(grafo,nivel);
+    VInterfaz.personaje.DPersonaje1(0);
+    VInterfaz.personaje.DPersonaje1(1);
     do{
-       VInterfaz.mover();
+       VInterfaz.mover(grafo);
     }while(VInterfaz.fin);
+}
+void crearVentana(void * aArg){
+    iniciarJuego();
 }
 
 
@@ -88,10 +91,7 @@ void inicioHilos(){
     t2.join();
 }
 int main() {
-    grafo->arbol(4,5);
+    //grafo->arbol(filas,columnas);
     inicioHilos();
-
-  //  t.~thread();
- //   t2.~thread();
     return 0;
 }
