@@ -101,7 +101,7 @@ public:
 
     //RECIBE UN NODO Y PINTA UNA PARED EN LAS DIRECCIONES
     //DONDE NO HAY CAMINO PARA MOVERSE
-    void pared(Nodo *nodo,int nivel,int x,int y){
+    void pared(Nodo *nodo,int nivel,int x,int y,int dimY ){
         //cuadro izquierdo
         nodo->listaAristas->goToPos(0);
         if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()-1){
@@ -120,14 +120,15 @@ public:
         }
         //cuadro arriba
         nodo->listaAristas->goToPos(2);
-        if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+        if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()-dimY
+           ||nodo->listaAristas->getElement()->nodoDestino->numero==0){
             pintarCuadro(x-42,y-45);
             pintarCuadro(x-12,y-45);
             pintarCuadro(x+18,y-45);
         }
         //cuadro abajo
         nodo->listaAristas->goToPos(3);
-        if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+        if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()+dimY){
             pintarCuadro(x-42,y+15);
             pintarCuadro(x-12,y+15);
             pintarCuadro(x+18,y+15);
@@ -141,7 +142,7 @@ public:
         grafo->listaNodos->goToStart();
         for(int i=0;i<grafo->listaNodos->getSize();i++){
             Nodo *nodo=grafo->listaNodos->getElement();
-            pared(nodo,nivel,x,y);
+            pared(nodo,nivel,x,y,grafo->dimensionY);
             string time;
             stringstream mm;
             mm<<(i+1);
@@ -186,23 +187,23 @@ public:
             personaje.setHeading(angulo);
             Nodo *nodo=grafo->listaNodos->getElement();
             nodo->listaAristas->goToPos(0);
-            if(direccion=="L" && nodo->listaAristas->getElement()->nodoDestino->numero!=0){
+            if(direccion=="L" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()-1){
                 posx = (posx + (maxx - desplazar)) % maxx;
                 personaje.setX(posx);
             }
             nodo->listaAristas->goToPos(1);
-            if(direccion=="R" && nodo->listaAristas->getElement()->nodoDestino->numero !=0||
-                nodo->getNumero()==(grafo->dimensionX*grafo->dimensionY)){
+            if(direccion=="R" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()+1||
+                nodo->getSalida()){
                 posx = (posx + desplazar) % maxx;
                 personaje.setX(posx);
             }
             nodo->listaAristas->goToPos(2);
-            if(direccion=="U" && nodo->listaAristas->getElement()->nodoDestino->numero !=0){
+            if(direccion=="U" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()-grafo->dimensionY){
                 posy = (posy + (maxy - desplazar)) % maxy;
                 personaje.setY(posy);
             }
             nodo->listaAristas->goToPos(3);
-            if(direccion=="D" && nodo->listaAristas->getElement()->nodoDestino->numero !=0){
+            if(direccion=="D" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()+grafo->dimensionY){
                 posy = (posy + desplazar) % maxy;
                 personaje.setY(posy);
             }

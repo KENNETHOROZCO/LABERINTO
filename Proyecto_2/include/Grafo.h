@@ -473,6 +473,7 @@ void relajacion( Nodo *actual , Nodo *adyacente , int peso ){
 
 
 DLinkedList<Nodo> *dijkstra( int destino){
+    normalizarNodos();
     cout<<"Salimos de: "<<destino<<endl;
     listaNodos->goToPos(destino);
     listaNodos->getElement()->distancia=0;
@@ -506,6 +507,20 @@ DLinkedList<Nodo> *dijkstra( int destino){
     }
     cout<<"tamano lista"<<listaNodos->getSize()<<endl;
     return getPath(listaNodos->getSize()-1); //Numero al cual qiero llegat
+}
+void normalizarNodos(){
+    for(int i =0;i<listaNodos->getSize();i++){
+        listaNodos->goToPos(i);
+        listaNodos->getElement()->visitado=false;
+        listaNodos->getElement()->distancia=9999999;
+        listaNodos->getElement()->previo=NULL;
+
+
+    }
+    while(Q->getSize()!=0){
+        Q->removeFirst();
+    }
+
 }
 
 
