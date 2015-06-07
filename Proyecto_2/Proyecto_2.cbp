@@ -42,7 +42,9 @@
 		<Unit filename="include/DLinkedList.h" />
 		<Unit filename="include/DNode.h" />
 		<Unit filename="include/Grafo.h" />
+		<Unit filename="include/HeapNode.h" />
 		<Unit filename="include/Interfaz.h" />
+		<Unit filename="include/MinHeap.h" />
 		<Unit filename="include/Nodo.h" />
 		<Unit filename="include/Personaje.h" />
 		<Unit filename="include/fast_mutex.h" />

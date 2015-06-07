@@ -43,7 +43,18 @@ public:
         posAntY=y;
         personaje.setPos(posx,posy);
     }
-
+    void setMaxX(int x){
+        maxx=x;
+    }
+    void setMaxY(int y){
+        maxy=y;
+    }
+    int getMaxX(){
+        return maxx;
+    }
+    int getMaxY(){
+        return maxy;
+    }
     // DIBUJA O BORRA UNA FRUTA EN LA POSICIóN X, Y RECIBIDAS
     void dibujarGifs(bool pintar,int x, int y){
         if(pintar==true){
@@ -93,16 +104,15 @@ public:
     void pared(Nodo *nodo,int nivel,int x,int y){
         //cuadro izquierdo
         nodo->listaAristas->goToPos(0);
-        if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+        if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()-1){
             pintarCuadro(x-42,y-16);
             pintarCuadro(x-42,y-45);
             pintarCuadro(x-42,y+15);
         }
         //cuadro derecho
         nodo->listaAristas->goToPos(1);
-        if(nodo->listaAristas->getElement()->nodoDestino->numero==0){
+        if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()+1){
             if(!nodo->getSalida()){
-                cout<<nodo->getNumero()<<"num:"<<nodo->getSalida()<<endl;
                 pintarCuadro(x+18,y+15);
                 pintarCuadro(x+18,y-15);
                 pintarCuadro(x+18,y-45);
@@ -132,7 +142,12 @@ public:
         for(int i=0;i<grafo->listaNodos->getSize();i++){
             Nodo *nodo=grafo->listaNodos->getElement();
             pared(nodo,nivel,x,y);
-            //outtextxy(x,y,"p");
+            string time;
+            stringstream mm;
+            mm<<(i+1);
+            time=mm.str();
+            const char * c = ((string)time).c_str();
+            outtextxy(x,y,c);
             if(nodo->getFruta()){
                 dibujarGifs(true,x,y);
             }
@@ -164,6 +179,7 @@ public:
             personaje.setPosicion(personaje.getPosicion()+dimensionY);
             posAntY=posy;
         }
+        cout<<"pos"<<personaje.getPosicion()<<endl;
     }
     //CAMBIA EL RUMBO Y LA POSICIÓN DEL PERSONAJE EN LA VENTANA
     void desplazarPersonaje(string direccion, int angulo,Grafo *&grafo){
@@ -194,8 +210,8 @@ public:
     }
 
     //guarda la ruta más corta de la posición del personaje
-    void pintarRutaCorta(Grafo *&grafo){
-        setfillstyle(SOLID_FILL,COLOR(102,102,0));
+    void pintarRutaCorta(Grafo *grafo){
+        setfillstyle(SOLID_FILL,COLOR(255,0,255));
         DLinkedList<Nodo> *ruta=grafo->dijkstra(personaje.getPosicion());
         int xActual=personaje.getX()-10;
         int yActual=personaje.getY()-15;
@@ -208,13 +224,13 @@ public:
                 bar(xActual,yActual,xActual+60,yActual+30);
                 xActual+=60;}
             else if(nodo->getNumero()==posActual-1){
-                bar(xActual,yActual,xActual-60,yActual+30);
+                bar(xActual+30,yActual,xActual-60,yActual+30);
                 xActual-=60;}
             else if(nodo->getNumero()==posActual+grafo->dimensionY){
                 bar(xActual,yActual,xActual+27,yActual+60);
                 yActual+=60;}
             else if(nodo->getNumero()==posActual-grafo->dimensionY){
-                bar(xActual,yActual,xActual+27,yActual-60);
+                bar(xActual,yActual+30,xActual+27,yActual-60);
                 yActual-=60;}
                 posActual=nodo->getNumero();
             cout<<"pos actual "<<posActual<<endl;
@@ -222,12 +238,12 @@ public:
                 break;
             }
         }
+
     }
     //DETECTA SI UNA TECLA FUE SELECCIONADA Y VERIFICA CUAL FUE
     void teclaSeleccionada(int &tecla, Grafo *&grafo){
         int flecha;
         grafo->listaNodos->goToPos(personaje.getPosicion());
-        cout<<"pos"<<personaje.getPosicion()<<endl;
         //Nodo *nodo=grafo->listaNodos->getElement();
         switch(tecla){
             case 0:
@@ -263,7 +279,7 @@ public:
         grafo->listaNodos->goToPos(personaje.getPosicion());
         Nodo *nodo=grafo->listaNodos->getElement();
         recogerGifs(nodo);// REVISA SI PASO POR UN GIF
-        cout<<"GIFS: "<<personaje.getGifs()<<endl;
+        //cout<<"GIFS: "<<personaje.getGifs()<<endl;
         teclaSeleccionada(tecla,grafo);//REVISA QUE FLECHA FUE SELECCIONADA
     }
 

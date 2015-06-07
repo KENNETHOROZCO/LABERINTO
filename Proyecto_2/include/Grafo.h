@@ -477,6 +477,7 @@ DLinkedList<Nodo> *dijkstra( int destino){
     listaNodos->goToPos(destino);
     listaNodos->getElement()->distancia=0;
     Q->insert( listaNodos->getElement() ); //Insertamos el vértice inicial en la Cola de Prioridad
+
     int peso;
     Nodo *act;
     Nodo *ad;

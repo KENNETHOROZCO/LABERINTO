@@ -61,6 +61,16 @@ void cronometro(void * aArg){
 
 
 void iniciarJuego(){
+    grafo->arbol(filas+nivel,columnas+nivel);
+    grafo->mostrar_grafo();
+    VInterfaz.pintarGrafo(grafo,nivel);
+    VInterfaz.personaje.DPersonaje1(0);
+    VInterfaz.personaje.DPersonaje1(1);
+    do{
+       VInterfaz.mover(grafo);
+    }while(VInterfaz.fin);
+}
+void crearVentana(void * aArg){
     int x=320-(nivel*30);
     int y=250-(nivel*30);
     if(x<=60){
@@ -70,15 +80,6 @@ void iniciarJuego(){
         y=60;
     }
     VInterfaz.crearVentana(x,y);
-    grafo->arbol(filas+nivel,columnas+nivel);
-    VInterfaz.pintarGrafo(grafo,nivel);
-    VInterfaz.personaje.DPersonaje1(0);
-    VInterfaz.personaje.DPersonaje1(1);
-    do{
-       VInterfaz.mover(grafo);
-    }while(VInterfaz.fin);
-}
-void crearVentana(void * aArg){
     iniciarJuego();
 }
 
