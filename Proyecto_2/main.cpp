@@ -12,26 +12,28 @@
 #include <sstream>
 #include <Grafo.h>
 
-/*
-grafo->listaNodos->goToStart();
-Nodo* nodo=grafo->listaNodos->getElement();
-nodo->listaArista.goToStart();
-if(nodo->listaArista.getElement()){
-}
-*/
 using namespace std;
 using namespace tthread;
 Interfaz VInterfaz;
 int segundos;
-int nivel=4;
+int nivel=0;//5,10,14
 int ayuda=0;
 int filas=4;
-int columnas=5;
 thread t;
 thread t2;
-void cronometro(void * aArg);
-void crearVentana(void * aArg);
 
+void finDelJuego(){
+    if(segundos<=1){
+        cleardevice();
+        setcolor(COLOR(255,255,0));
+        settextstyle(2,1,12);
+        outtextxy(VInterfaz.getMaxX()/2-100,VInterfaz.getMaxY()/2-100,"Perdiste!!!");
+        cout<<"Tu puntaje: "<<VInterfaz.personaje.getPuntaje()<<endl;
+        cout<<"Record: nivel "<<nivel+1<<endl;
+        getch();
+        VInterfaz.fin=false;
+    }
+}
 void cambiarCronometro(){
     if(VInterfaz.personaje.getAyuda()){
         segundos-=(segundos*0.3);
@@ -39,14 +41,14 @@ void cambiarCronometro(){
     }
 }
 void iniciarCuenta(){
-    while(segundos!=-1 && VInterfaz.fin){
+    while(VInterfaz.fin){
         settextstyle(2,0,12);
-        if(!VInterfaz.pausa){
+        if(!VInterfaz.pausa && segundos>-1){
             VInterfaz.tiempoA(segundos);
             cambiarCronometro();
         }
-
     }
+
 }
 void setTiempo(){
     segundos=((nivel/4)+1)*10;
@@ -56,26 +58,27 @@ void setTiempo(){
 void cronometro(void * aArg){
     setTiempo();
     iniciarCuenta();
-    cout<<"entro"<<endl;
     exit(0);
     return;
 }
 
 void iniciarJuego(){
     Grafo *grafo = new Grafo();
-    grafo->arbol(filas+(nivel/2),columnas+nivel);
-    grafo->mostrar_grafo();
+    int f=filas+(nivel/2);
+    int columnas=f+(nivel%2);
+    grafo->arbol(f,columnas);
     VInterfaz.pintarGrafo(grafo,nivel);
     VInterfaz.personaje.DPersonaje1(0);
     VInterfaz.personaje.DPersonaje1(1);
     do{
-       VInterfaz.mover(grafo);
+        finDelJuego();
+        VInterfaz.mover(grafo);
     }while(VInterfaz.fin);
 }
 
 void posInicio(){
-    int x=320-(nivel*30);
-    int y=250-(nivel*30);
+    int x=320-(nivel*15);
+    int y=300-(nivel*15);
     if(x<=60){
         x=60;
     }
@@ -97,7 +100,6 @@ void inicioHilos(){
     t2.join();
 }
 int main() {
-    //grafo->arbol(filas,columnas);
     inicioHilos();
     return 0;
 }

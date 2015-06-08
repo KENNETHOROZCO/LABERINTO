@@ -23,10 +23,11 @@ private:
     int posx,posy,posAntX,posAntY;
 
 public:
-    bool pausa=false;
+    bool pausa;
     bool fin;
     Personaje personaje;
     Interfaz() { //constructor
+    pausa=false;
     fin = true;
     desplazar=60;
     maxx = 900;
@@ -135,8 +136,8 @@ public:
 
     //RECIBE EL GRAFO Y LA REPRESENTA EN MODO GRAFICO
     void pintarGrafo(Grafo *&grafo,int nivel){
-        int x=personaje.getX();//-(nivel*20);
-        int y=personaje.getY();//-(nivel*20);
+        int x=personaje.getX();
+        int y=personaje.getY();
         grafo->listaNodos->goToStart();
         for(int i=0;i<grafo->listaNodos->getSize();i++){
             Nodo *nodo=grafo->listaNodos->getElement();
@@ -152,7 +153,7 @@ public:
             }
             x+=desplazar;
             if((i+1)%grafo->dimensionY==0 && i!=0){
-                x=personaje.getX();//-(nivel*20);
+                x=personaje.getX();
                 y+=desplazar;
             }
             grafo->listaNodos->next();
@@ -190,8 +191,8 @@ public:
                 personaje.setX(posx);
             }
             nodo->listaAristas->goToPos(1);
-            if(direccion=="R" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()+1||
-                nodo->getSalida()){
+            if(direccion=="R" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()+1
+            || nodo->getSalida()){
                 posx = (posx + desplazar) % maxx;
                 personaje.setX(posx);
             }
@@ -208,36 +209,42 @@ public:
         cambiarPosPersonaje(grafo->dimensionY);
     }
 
-    //guarda la ruta más corta de la posición del personaje
+    //muestra la ruta más corta desde el personaje hasta la salida
     void pintarRutaCorta(Grafo *grafo,int pintar){
         DLinkedList<Nodo> *ruta=grafo->dijkstra(personaje.getPosicion());
-        int xActual=personaje.getX()-10;
-        int yActual=personaje.getY()-15;
+        int xActual=personaje.getX();
+        int yActual=personaje.getY();
         ruta->goToPos(ruta->getSize()-1);
         int posActual=ruta->getElement()->numero;
         cout<<"actual"<<posActual<<endl;
-        for(ruta->goToPos(ruta->getSize()-1);ruta->getPos()>=0;ruta->previous()){
-            if(pintar){setfillstyle(SOLID_FILL,COLOR(255,0,255));}
+        for(ruta->goToPos(ruta->getSize()-2);ruta->getPos()>=0;ruta->previous()){
+            if(pintar){setfillstyle(SOLID_FILL,COLOR(100,123,34));}
             else{setfillstyle(SOLID_FILL,COLOR(0,0,0));}
             Nodo *nodo=ruta->getElement();
             if(nodo->getNumero()==posActual+1){
-                bar(xActual,yActual,xActual+60,yActual+30);
-                //if(nodo->getFruta())dibujarGifs(xActual+10,yActual+15);
-                xActual+=60;}
+                xActual+=60;
+                bar(xActual+17,yActual+15,xActual-43,yActual-15);
+                if(nodo->getFruta())dibujarGifs(xActual,yActual);
+            }
             if(nodo->getNumero()==posActual-1){
-                bar(xActual+28,yActual,xActual-35,yActual+30);
-                //if(nodo->getFruta())dibujarGifs(xActual+10,yActual+15);
-                xActual-=60;}
+                xActual-=60;
+                bar(xActual-11,yActual-15,xActual+49,yActual+15);
+                if(nodo->getFruta())dibujarGifs(xActual,yActual);
+            }
             if(nodo->getNumero()==posActual+grafo->dimensionY){
-                bar(xActual,yActual,xActual+27,yActual+60);
-                //if(nodo->getFruta())dibujarGifs(xActual+12,yActual+15);
-                yActual+=60;}
+                yActual+=60;
+                bar(xActual-11,yActual+15,xActual+17,yActual-45);
+                if(nodo->getFruta())dibujarGifs(xActual,yActual);
+
+            }
             if(nodo->getNumero()==posActual-grafo->dimensionY){
-                bar(xActual,yActual+30,xActual+27,yActual-30);
-                //if(nodo->getFruta())dibujarGifs(xActual+12,yActual+15);
-                yActual-=60;}
+                yActual-=60;
+                bar(xActual-11,yActual-15,xActual+17,yActual+45);
+                if(nodo->getFruta())dibujarGifs(xActual,yActual);
+
+            }
                 posActual=nodo->getNumero();
-            cout<<"pos actual "<<posActual<<endl;
+            cout<<"pos actual"<<posActual<<endl;
             if(ruta->getPos()==0){
                 break;
             }
