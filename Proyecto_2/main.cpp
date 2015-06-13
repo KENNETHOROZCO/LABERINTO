@@ -18,7 +18,7 @@ void iniciarJuego();
 Interfaz VInterfaz;
 Grafo *grafo = new Grafo();
 int segundos;
-int nivel=15;
+int nivel=0;
 int nivelExtra;
 int ayuda=0;
 int filas=4;
@@ -57,13 +57,13 @@ void estadisticas(){
     r<<nivel+1;
     g<<VInterfaz.personaje.getGifs();
     outtextxy(VInterfaz.getMaxX()/2-150,VInterfaz.getMaxY()/2-300,"¡GAME OVER!");
-    estadisticas="puntaje: "+p.str();
+    estadisticas="score: "+p.str();
     const char * estadistica = ((string)estadisticas).c_str();
     outtextxy(VInterfaz.getMaxX()/2-400,VInterfaz.getMaxY()/2+20,estadistica);
     estadisticas="record: "+r.str();
     estadistica=((string)estadisticas).c_str();
     outtextxy(VInterfaz.getMaxX()/2-80,VInterfaz.getMaxY()/2+20,estadistica);
-    estadisticas="gifs: "+g.str();
+    estadisticas="apples: "+g.str();
     estadistica=((string)estadisticas).c_str();
     outtextxy(VInterfaz.getMaxX()/2+200,VInterfaz.getMaxY()/2+20,estadistica);
     cout<<"nivel"<<r.str()<<" puntaje "<<p.str()<<"gifs: "<<g.str()<<endl;
@@ -153,7 +153,7 @@ void iniciarJuego(){
     const char * ni = ((string)n).c_str();
     setcolor(COLOR(160,160,160));
     settextstyle(1,0,1);
-    outtextxy(5,0,ni);
+    outtextxy(10,VInterfaz.getMaxY()-50,ni);
     do{
         VInterfaz.mover(grafo);
         finDelJuego();

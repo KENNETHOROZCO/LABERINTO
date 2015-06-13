@@ -219,6 +219,12 @@ void arbol(int x,int y){
         }
     }
 
+    if(listaNodos->getSize()!=x*y){
+            listaNodos->clear();
+            arbol(x,y);
+            return;
+
+    }
     agregarAristasExtras(x,y);
     reordenar(x,y);
     listaNodos->goToPos(listaNodos->getSize()-1);
@@ -337,7 +343,7 @@ void agregarAristasExtras(int x, int y){
                 bandera=false;
                 continue;
             }
-            if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=1){
+            else if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=1){
             addArista(num1,num1-1,true);
             bandera=true;
             break;
@@ -512,8 +518,6 @@ void normalizarNodos(){
     }
 
 }
-
-
 
 };
 
