@@ -18,7 +18,8 @@ void iniciarJuego();
 Interfaz VInterfaz;
 Grafo *grafo = new Grafo();
 int segundos;
-int nivel=0;
+int nivel=15;
+int nivelExtra;
 int ayuda=0;
 int filas=4;
 int tamannio;// TAMAÑO DEL LABERINTO
@@ -27,13 +28,13 @@ thread t2; // HILO DEL CRONOMETRO
 
 //POSICIONA AL PERSONAJE EN LA POSICION DE INICIO DEL JUEGO SEGUN EL NIVEL
 void posInicio(){
-    int x=(VInterfaz.getMaxX()/3)-(nivel*15);
-    int y=(VInterfaz.getMaxY()/3)-(nivel*15);
+    int x=(VInterfaz.getMaxX()/2-100)-(nivel*15);
+    int y=(VInterfaz.getMaxY()/2-100)-(nivel*15);
     if(x<=60){
         x=30;
     }
     if(y<=60){
-        y=30;
+        y=60;
     }
     VInterfaz.posInicial(x,y);
 }
@@ -42,6 +43,7 @@ void posInicio(){
 void determinarTiempo(){
     segundos=(nivel/4+1)*7;
     segundos+=VInterfaz.personaje.getExtraTime()+1;
+    segundos-=nivelExtra*5;
     VInterfaz.personaje.setExtraTime(0);
 }
 
@@ -51,9 +53,10 @@ void estadisticas(){
     string estadisticas;
     stringstream p,r,g;
     p<<VInterfaz.personaje.getPuntaje();
+    nivel+=nivelExtra;
     r<<nivel+1;
     g<<VInterfaz.personaje.getGifs();
-    outtextxy(VInterfaz.getMaxX()/2-150,VInterfaz.getMaxY()/2-300,"GAME OVER!!!");
+    outtextxy(VInterfaz.getMaxX()/2-150,VInterfaz.getMaxY()/2-300,"¡GAME OVER!");
     estadisticas="puntaje: "+p.str();
     const char * estadistica = ((string)estadisticas).c_str();
     outtextxy(VInterfaz.getMaxX()/2-400,VInterfaz.getMaxY()/2+20,estadistica);
@@ -63,12 +66,13 @@ void estadisticas(){
     estadisticas="gifs: "+g.str();
     estadistica=((string)estadisticas).c_str();
     outtextxy(VInterfaz.getMaxX()/2+200,VInterfaz.getMaxY()/2+20,estadistica);
+    cout<<"nivel"<<r.str()<<" puntaje "<<p.str()<<"gifs: "<<g.str()<<endl;
 }
 
 // REVISA SI EL JUEGO SE TERMINO O NO
 void finDelJuego(){
     if(segundos<0){
-        //setbkcolor(COLOR(102,0,0));
+        setbkcolor(COLOR(102,0,0));
         cleardevice();
         setcolor(COLOR(255,255,0));
         int x=VInterfaz.getMaxX()/2-135;
@@ -100,7 +104,8 @@ void finDelJuego(){
         VInterfaz.personaje.setPuntaje(30);
         VInterfaz.personaje.setExtraTime(segundos);
         VInterfaz.personaje.setGifs();
-        nivel++;
+        if(nivel<=15){nivel++;}
+        else{nivelExtra++;}
         posInicio();
         determinarTiempo();
         iniciarJuego();
@@ -142,6 +147,13 @@ void iniciarJuego(){
     VInterfaz.pintarGrafo(grafo);
     VInterfaz.personaje.DPersonaje1(0,3);
     VInterfaz.personaje.DPersonaje1(1,3);
+    stringstream p;
+    p<<nivel+1;
+    string n="nivel "+p.str();
+    const char * ni = ((string)n).c_str();
+    setcolor(COLOR(160,160,160));
+    settextstyle(1,0,1);
+    outtextxy(5,0,ni);
     do{
         VInterfaz.mover(grafo);
         finDelJuego();

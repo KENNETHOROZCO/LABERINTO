@@ -32,7 +32,7 @@ public:
     desplazar=60;
     maxx = 1000;
     maxy = 740;
-    RFondo=102;//160 tods
+    RFondo=0;//160 tods
     GFondo=0;
     BFondo=0;
     personaje.fondo(RFondo,GFondo,BFondo);
@@ -257,6 +257,7 @@ public:
         grafo->listaNodos->goToPos(personaje.getPosicion());
         switch(tecla){
             case 0:
+                pausa=false;
                 flecha=getch();
                 switch(flecha){
                     case KEY_UP: // HACIA ARRIBA
@@ -281,7 +282,7 @@ public:
                         break;
                 }break;
             case 27: // TECLA ESC
-                    fin = false;
+                    pausa=true;
                     break;
         }
     }
