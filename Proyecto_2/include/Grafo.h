@@ -326,42 +326,33 @@ void agregarAristasExtras(int x, int y){
     srand(time(NULL));
     int res=x*y;
     bool bandera;
-    for(int i =0;i<(res*0.05)/2;i++){
+    for(int i =0;i<(res*0.05);i++){
         bandera=false;
         int num1 = (rand()%x*y)/(((res*0.05)/2)-i);
         while(!bandera){
-            if(num1<0||num1>res){
-                --i;
-                break;
+                cout<<"ciclo"<<endl;
+            if(num1<0){
+                ++num1;
+                bandera=false;
+                continue;
             }
-            if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=0&&num1%y!=1){
+            else if(num1>res){
+                --num1;
+                bandera=false;
+                continue;
+            }
+
+            if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=1){
             addArista(num1,num1-1,true);
             bandera=true;
             break;
             }else{
-                --num1;
+                ++num1;
             }
         }
     }
-    for(int i =0;i<(res*0.05)/2;i++){
-        bandera=false;
-        int num1 = (rand()%x*y)/(((res*0.05)/2)-i);
-        while(!bandera){
-            if(num1<0||num1>res){
-                --i;
-                break;
-            }
-            if(num1-y>x&&!existe(num1,num1-y)&&num1%y!=0){
-            addArista(num1,num1-y,true);
-            bandera=true;
-            break;
-            }else{
-                --num1;
-            }
-        }
-    }
-}
-bool existe(int indice,int nodoActual){
+
+}bool existe(int indice,int nodoActual){
     listaNodos->goToPos(nodoActual);
 
     for(int i =0;i<listaNodos->getElement()->listaAristas->getSize();i++){
