@@ -9,29 +9,27 @@
 #include<MinHeap.h>
 
 using namespace std;
-
+struct nodo{
+            int numero;//nombre del vertice o nodo
+            struct Nodo *siguiente;
+            struct arista *listaAdyacencia;//puntero hacia la primera arista del nodo
+            };
 
 class Grafo
 {
 
-public://
+public:
     MinHeap *Q;
     DLinkedList<Nodo> *listaNodos;
     Nodo *principal;
     int dimensionX;
     int dimensionY;
     int gifsPantalla;
-
-//Constructor
 Grafo(){
     Q=new MinHeap();
     principal= NULL;
     listaNodos=new DLinkedList<Nodo>();
 }
-
-
-
-
 void insertar_nodo(int indice){
     Nodo *nuevo=new Nodo();
     Nodo *t=new Nodo();
@@ -49,55 +47,74 @@ void insertar_nodo(int indice){
         }
         t->siguiente = nuevo;
     }
- }//
+ }
 
+ void vaciar_aristas(Nodo *aux){
+    arista *q,*r;
+    q=aux->listaAdyacencia;
+    while(q->siguiente!=NULL){
+        r=q;
+        q=q->siguiente;
+        delete(r);
+    }
+}
 
-//Agrega una arista entre un par de nodos
-
-//Metodo auxiliar de insertar_arista
-void agrega_arista(Nodo *nodo1, Nodo *nodo2, arista *arisTemp){
-        if(nodo1->listaAristas->getSize()==-1){
-            arisTemp->nodoDestino=nodo2;
-            nodo1->listaAristas->append(arisTemp);
+void agrega_arista(Nodo *aux, Nodo *aux2, arista *nuevo,bool bandera){
+    if(bandera){
+        if(aux->listaAristas->getSize()==-1){
+            nuevo->nodoDestino=aux2;
+            aux->listaAristas->append(nuevo);
         }
         else{
-            arisTemp->nodoDestino=nodo2;//
-            nodo1->listaAristas->append(arisTemp);
+            nuevo->nodoDestino=aux2;
+            aux->listaAristas->append(nuevo);
         }
         return;
-
-
+    }
+    if(aux->listaAristas->getSize()==-1){
+        nuevo->nodoDestino=new Nodo();
+        aux->listaAristas->append(nuevo);
+    }
+    else{
+        nuevo->nodoDestino=new Nodo();
+        aux->listaAristas->append(nuevo);
+    }
 }
 
 void insertar_arista(int inicio,int fin,bool bandera){
-    arista *arisTemp=new struct arista;
-    Nodo *nodo1;
-    Nodo *nodo2;
+    arista *nuevo=new struct arista;
+    Nodo *aux;
+    Nodo *aux2;
     listaNodos->goToStart();
-    //Si no existen nodos se termina la funcion
     if(listaNodos->getSize()==0){
         return;
     }
-    arisTemp->siguiente=NULL;
-    // se busca el primer nodo
-    while(nodo2!=NULL){
-        nodo2=listaNodos->getElement();
-        if(nodo2->numero==fin){
+    nuevo->siguiente=NULL;
+    while(aux2!=NULL){
+        aux2=listaNodos->getElement();
+        if(aux2->numero==fin){
             break;
         }
         listaNodos->next();
     }
     listaNodos->goToStart();
-    nodo1=listaNodos->getElement();
-    //Se busca el segundo el nodo
-    while(nodo1!=NULL){
-        if(nodo1->numero==inicio){
-            agrega_arista(nodo1,nodo2, arisTemp);
+    aux=listaNodos->getElement();
+    while(aux!=NULL){
+        if(aux->numero==inicio){
+            agrega_arista(aux,aux2, nuevo,bandera);
             return;
         }
         listaNodos->next();
-        nodo1 = nodo1->siguiente;
+        aux = aux->siguiente;
     }
+}
+
+Nodo buscarNodo(int indice){
+    Nodo *temp=principal;
+    while(temp->siguiente!=NULL){
+        temp=temp->siguiente;
+    }
+    return *temp;
 }
 
 void eliminar_nodo(int indice){
@@ -115,10 +132,10 @@ void generarLaberinto(int x, int y){
     for(int i=1;i<x*y+2;i++){
         insertar_nodo(i);
         if(i-1>0&&i%y!=1){
-            addArista(i,i-1);
+            addArista(i,i-1,true);
         }
         if(i-y>0){
-            addArista(i,i-y);
+            addArista(i,i-y,true);
         }
     }
     eliminar_nodo(x*y+1);
@@ -133,7 +150,7 @@ void generar(DLinkedList<int> *lista){
         lista->goToPos(i+1);
         int indice2=*lista->getElement();
         insertar_nodo(indice2);
-        addArista(indice1,indice2);
+        addArista(indice1,indice2,true);
     }
     //mostrar_grafo();
 }
@@ -153,7 +170,7 @@ DLinkedList<Nodo> *getFinal(DLinkedList<Nodo> *lista){
         int indice1=listaNodos->getElement()->numero;
         listaNodos->goToPos(3);
         int indice2=listaNodos->getElement()->numero;
-        addArista(indice1,indice2);
+        addArista(indice1,indice2,true);
     }
     //mostrar_grafo();
     return temp;
@@ -309,7 +326,7 @@ void agregarAristasExtras(int x, int y){
     srand(time(NULL));
     int res=x*y;
     bool bandera;
-    for(int i =0;i<(res*0.10);i++){
+    for(int i =0;i<(res*0.05);i++){
         bandera=false;
         int num1 = (rand()%x*y)/(((res*0.05)/2)-i);
         while(!bandera){
@@ -325,8 +342,8 @@ void agregarAristasExtras(int x, int y){
                 continue;
             }
 
-            if(num1-y>0&&!existe(num1-1,num1)&&!existe(num1,num1-1)&&num1%y!=1){
-            addArista(num1,num1-1);
+            if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=1){
+            addArista(num1,num1-1,true);
             bandera=true;
             break;
             }else{
@@ -347,7 +364,17 @@ void agregarAristasExtras(int x, int y){
     return false;
 }
 
-
+void acomodarLista(){
+    listaNodos->goToStart();
+    for(int i=0;i<listaNodos->getSize();i++){
+        listaNodos->goToPos(i);
+        Nodo *temp=listaNodos->getElement();
+        temp->listaAristas->goToPos(1);
+        arista *aris=temp->listaAristas->remove();
+        temp->listaAristas->next();
+        temp->listaAristas->insert(aris);
+    }
+}
 
 void setPrincipal(Nodo *pPrincipal){
     principal=pPrincipal;
@@ -398,15 +425,19 @@ void mostrar_grafo(){
              }
         }
         listaNodos->next();
+        cout<<endl;
     }
 }
 
-void addArista(int indiceArista1, int indiceArista2){
-
+void addArista(int indiceArista1, int indiceArista2,bool ambas){
+    if(ambas){
         insertar_arista(indiceArista2,indiceArista1,true);
         insertar_arista(indiceArista1,indiceArista2,true);
-
-
+    }
+    else{
+        insertar_arista(indiceArista2,indiceArista1,false);
+        insertar_arista(indiceArista1,indiceArista2,false);
+    }
 }
 
 
@@ -427,6 +458,7 @@ DLinkedList<Nodo> *getPath( int destino ){
 
 //Prueba si se cumple que el peso actual del menor  mas el peso es mejor que el del adyacente
 void relajacion( Nodo *actual , Nodo *adyacente , int peso ){
+    //Si la distancia del origen al vertice actual + peso de su arista es menor a la distancia del origen al vertice adyacente
     if( actual->distancia + peso < adyacente->distancia ){
         adyacente->distancia = actual->distancia + peso;
         adyacente->previo = actual;
@@ -445,7 +477,7 @@ DLinkedList<Nodo> *dijkstra( int destino){
     int peso;
     Nodo *act;
     Nodo *ad;
-    while( Q->getSize()!=0 ){
+    while( Q->getSize()!=0 ){//Mientras cola no este vacia
 
         act = Q->removeFirst() ;
 
@@ -460,8 +492,8 @@ DLinkedList<Nodo> *dijkstra( int destino){
 
             act->listaAristas->goToPos(i);
 
-            ad = act->listaAristas->getElement()->nodoDestino;
-            peso = 1;        //peso de la arista que une actual con adyacente ( actual , adyacente ) en este caso 1 ya  que no es etiquetado
+            ad = act->listaAristas->getElement()->nodoDestino;   //id del vertice adyacente
+            peso = 1;        //peso de la arista que une actual con adyacente ( actual , adyacente )
             if( !ad->visitado ){        //si el vertice adyacente no fue visitado
                 relajacion( act , ad , peso ); //realizamos el paso de relajacion
 
