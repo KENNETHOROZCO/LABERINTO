@@ -46,6 +46,7 @@ public:
         posAntX=x;
         posAntY=y;
         personaje.setPos(posx,posy);
+        personaje.setPosicion(0);
     }
     void setMaxX(int x){
         maxx=x;
@@ -101,39 +102,34 @@ public:
     //RECIBE UN NODO Y PINTA UNA PARED EN LAS DIRECCIONES
     //DONDE NO HAY CAMINO PARA MOVERSE
     void pared(Nodo *nodo,int nivel,int x,int y,int dimY ){
+        pintarCuadro(x-42,y-45);
+        pintarCuadro(x+18,y-45);
+        pintarCuadro(x+18,y+15);
+        pintarCuadro(x-42,y+15);
         //cuadro izquierdo
         nodo->listaAristas->goToPos(0);
         if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()-1){
-            pintarCuadro(x-42,y-16);
-            pintarCuadro(x-42,y-45);
-            pintarCuadro(x-42,y+15);
+            pintarCuadro(x-42,y-15);
         }
         //cuadro derecho
         nodo->listaAristas->goToPos(1);
         if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()+1){
             if(!nodo->getSalida()){
-                pintarCuadro(x+18,y+15);
                 pintarCuadro(x+18,y-15);
-                pintarCuadro(x+18,y-45);
             }
         }
         //cuadro arriba
         nodo->listaAristas->goToPos(2);
         if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()-dimY
            ||nodo->listaAristas->getElement()->nodoDestino->numero==0){
-            pintarCuadro(x-42,y-45);
             pintarCuadro(x-12,y-45);
-            pintarCuadro(x+18,y-45);
         }
         //cuadro abajo
         nodo->listaAristas->goToPos(3);
         if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()+dimY){
-            pintarCuadro(x-42,y+15);
             pintarCuadro(x-12,y+15);
-            pintarCuadro(x+18,y+15);
         }
     }
-
     //RECIBE EL GRAFO Y LA REPRESENTA EN MODO GRAFICO
     void pintarGrafo(Grafo *&grafo,int nivel){
         int x=personaje.getX();
@@ -142,12 +138,6 @@ public:
         for(int i=0;i<grafo->listaNodos->getSize();i++){
             Nodo *nodo=grafo->listaNodos->getElement();
             pared(nodo,nivel,x,y,grafo->dimensionY);
-            string time;
-            stringstream mm;
-            mm<<(i+1);
-            time=mm.str();
-            const char * c = ((string)time).c_str();
-            outtextxy(x,y,c);
             if(nodo->getFruta()){
                 dibujarGifs(x,y);
             }

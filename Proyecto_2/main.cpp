@@ -14,14 +14,34 @@
 
 using namespace std;
 using namespace tthread;
+void iniciarJuego();
 Interfaz VInterfaz;
 int segundos;
 int nivel=0;//5,10,14
 int ayuda=0;
 int filas=4;
+int tamannio;
 thread t;
 thread t2;
 
+
+void posInicio(){
+    int x=320-(nivel*15);
+    int y=300-(nivel*15);
+    if(x<=60){
+        x=60;
+    }
+    if(y<=60){
+        y=60;
+    }
+    VInterfaz.posInicial(x,y);
+}
+void setTiempo(){
+    segundos=((nivel/4)+1)*5;
+    //cout<<"segundos "<<segundos<<endl;
+    segundos+=VInterfaz.personaje.getExtraTime()+1;
+    segundos-=ayuda;
+}
 void finDelJuego(){
     if(segundos<=1){
         cleardevice();
@@ -30,8 +50,20 @@ void finDelJuego(){
         outtextxy(VInterfaz.getMaxX()/2-100,VInterfaz.getMaxY()/2-100,"Perdiste!!!");
         cout<<"Tu puntaje: "<<VInterfaz.personaje.getPuntaje()<<endl;
         cout<<"Record: nivel "<<nivel+1<<endl;
+        cout<<"Gifs: "<<VInterfaz.personaje.getGifs()<<endl;
         getch();
         VInterfaz.fin=false;
+    }
+    else if(VInterfaz.personaje.getPosicion()==tamannio-1){
+        VInterfaz.pausa=true;
+        cleardevice();
+        VInterfaz.personaje.setPuntaje(30);
+        VInterfaz.personaje.setExtraTime(segundos);
+        nivel++;
+        posInicio();
+        setTiempo();
+        iniciarJuego();
+
     }
 }
 void cambiarCronometro(){
@@ -48,12 +80,6 @@ void iniciarCuenta(){
             cambiarCronometro();
         }
     }
-
-}
-void setTiempo(){
-    segundos=((nivel/4)+1)*10;
-    segundos+=VInterfaz.personaje.getExtraTime()+1;
-    segundos-=ayuda;
 }
 void cronometro(void * aArg){
     setTiempo();
@@ -63,9 +89,11 @@ void cronometro(void * aArg){
 }
 
 void iniciarJuego(){
+    VInterfaz.pausa=false;
     Grafo *grafo = new Grafo();
     int f=filas+(nivel/2);
     int columnas=f+(nivel%2);
+    tamannio=f*columnas;
     grafo->arbol(f,columnas);
     VInterfaz.pintarGrafo(grafo,nivel);
     VInterfaz.personaje.DPersonaje1(0);
@@ -76,17 +104,6 @@ void iniciarJuego(){
     }while(VInterfaz.fin);
 }
 
-void posInicio(){
-    int x=320-(nivel*15);
-    int y=300-(nivel*15);
-    if(x<=60){
-        x=60;
-    }
-    if(y<=60){
-        y=60;
-    }
-    VInterfaz.posInicial(x,y);
-}
 void crearVentana(void * aArg){
     VInterfaz.crearVentana();
     posInicio();
