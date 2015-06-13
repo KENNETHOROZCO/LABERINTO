@@ -17,6 +17,7 @@ private:
     int BT;
     int extraTime;
     int gifs;
+    int gifsP;
     int puntaje;
     int posicion;
     bool ayuda;
@@ -34,6 +35,7 @@ public:
         BT=0;
         extraTime=0;
         gifs=0;
+        gifsP=0;
         puntaje=0;
         posicion=0;
         ayuda=false;
@@ -65,11 +67,15 @@ public:
     void setHeading(int grados){
         rumbo=fmod((360-grados),360);
     }
-    void setGifs(int gif){
-        gifs+=gif;
+    void setGifs(){
+        gifs+=gifsP;
+        gifsP=0;
+    }
+    void setGifsP(int gif){
+        gifsP+=gif;
     }
     void setExtraTime(int pTime){
-        extraTime+=pTime;
+        extraTime=pTime;
     }
     void setPuntaje(int pPuntaje){
         puntaje+=pPuntaje;
@@ -80,6 +86,9 @@ public:
     //getters solo muestran los datos no modifican
     int getGifs(){
         return gifs;
+    }
+    int getGifsP(){
+        return gifsP;
     }
     int getExtraTime(){
         return extraTime;

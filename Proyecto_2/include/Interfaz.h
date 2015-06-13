@@ -78,7 +78,7 @@ public:
     //VERIFICA SI EL PERSONAJE TOMO O NO UNA FRUTA
     void recogerGifs(Nodo *&nodo){
         if(nodo->getFruta()==true){
-            personaje.setGifs(1);
+            personaje.setGifsP(1);
             nodo->setFruta(false);
         }
     }
@@ -101,7 +101,7 @@ public:
 
     //RECIBE UN NODO Y PINTA UNA PARED EN LAS DIRECCIONES
     //DONDE NO HAY CAMINO PARA MOVERSE
-    void pared(Nodo *nodo,int nivel,int x,int y,int dimY ){
+    void pared(Nodo *nodo,int x,int y,int dimY ){
         pintarCuadro(x-42,y-45);
         pintarCuadro(x+18,y-45);
         pintarCuadro(x+18,y+15);
@@ -120,8 +120,7 @@ public:
         }
         //cuadro arriba
         nodo->listaAristas->goToPos(2);
-        if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()-dimY
-           ||nodo->listaAristas->getElement()->nodoDestino->numero==0){
+        if(nodo->listaAristas->getElement()->nodoDestino->numero!=nodo->getNumero()-dimY){
             pintarCuadro(x-12,y-45);
         }
         //cuadro abajo
@@ -137,7 +136,7 @@ public:
         grafo->listaNodos->goToStart();
         for(int i=0;i<grafo->listaNodos->getSize();i++){
             Nodo *nodo=grafo->listaNodos->getElement();
-            pared(nodo,nivel,x,y,grafo->dimensionY);
+            pared(nodo,x,y,grafo->dimensionY);
             if(nodo->getFruta()){
                 dibujarGifs(x,y);
             }
@@ -187,7 +186,7 @@ public:
                 personaje.setX(posx);
             }
             nodo->listaAristas->goToPos(2);
-            if(direccion=="U" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()-grafo->dimensionY){
+            if(direccion=="U" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()-grafo->dimensionY ){
                 posy = (posy + (maxy - desplazar)) % maxy;
                 personaje.setY(posy);
             }

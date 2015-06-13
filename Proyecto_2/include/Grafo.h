@@ -24,6 +24,7 @@ public:
     Nodo *principal;
     int dimensionX;
     int dimensionY;
+    int gifsPantalla;
 Grafo(){
     Q=new MinHeap();
     principal= NULL;
@@ -176,6 +177,8 @@ DLinkedList<Nodo> *getFinal(DLinkedList<Nodo> *lista){
 }
 
 void arbol(int x,int y){
+    listaNodos->clear();
+    principal=NULL;
     dimensionX=x;
     dimensionY=y;
     generarLaberinto(dimensionX,dimensionY);
@@ -218,7 +221,7 @@ void arbol(int x,int y){
         }
     }
 
-    agregarAristasExtras(x,y);
+    //agregarAristasExtras(x,y);
     reordenar(x,y);
     listaNodos->goToPos(listaNodos->getSize()-1);
     listaNodos->getElement()->setSalida(true);
@@ -239,7 +242,7 @@ void anadirVacio(int indice, int posicion){
         if(listaNodos->getElement()->numero==indice){
             Nodo *temp=listaNodos->getElement();
             arista *nuevaArista=new struct arista;
-            nuevaArista->nodoDestino=new Nodo(0);
+            nuevaArista->nodoDestino=new Nodo(-100);
             temp->listaAristas->goToPos(posicion);
             temp->listaAristas->insert(nuevaArista);
         }
@@ -309,7 +312,8 @@ void reordenar(int x,int y){
         }
     }
     srand(time(NULL));
-    for(int i =0;i<(y*x*0.06);i++){
+    gifsPantalla=(y*x/5);
+    for(int i =0;i<gifsPantalla;i++){
         int f=rand()%(x*y);
         listaNodos->goToPos(f);
         if(!listaNodos->getElement()->getFruta() ){

@@ -16,6 +16,7 @@ using namespace std;
 using namespace tthread;
 void iniciarJuego();
 Interfaz VInterfaz;
+Grafo *grafo = new Grafo();
 int segundos;
 int nivel=0;//5,10,14
 int ayuda=0;
@@ -37,10 +38,9 @@ void posInicio(){
     VInterfaz.posInicial(x,y);
 }
 void setTiempo(){
-    segundos=((nivel/4)+1)*5;
-    //cout<<"segundos "<<segundos<<endl;
+    segundos=5;
     segundos+=VInterfaz.personaje.getExtraTime()+1;
-    segundos-=ayuda;
+    VInterfaz.personaje.setExtraTime(0);
 }
 void finDelJuego(){
     if(segundos<=1){
@@ -54,11 +54,12 @@ void finDelJuego(){
         getch();
         VInterfaz.fin=false;
     }
-    else if(VInterfaz.personaje.getPosicion()==tamannio-1){
+    else if(VInterfaz.personaje.getPosicion()==tamannio-1 &&VInterfaz.personaje.getGifsP()==grafo->gifsPantalla){
         VInterfaz.pausa=true;
         cleardevice();
         VInterfaz.personaje.setPuntaje(30);
         VInterfaz.personaje.setExtraTime(segundos);
+        VInterfaz.personaje.setGifs();
         nivel++;
         posInicio();
         setTiempo();
@@ -90,11 +91,11 @@ void cronometro(void * aArg){
 
 void iniciarJuego(){
     VInterfaz.pausa=false;
-    Grafo *grafo = new Grafo();
     int f=filas+(nivel/2);
     int columnas=f+(nivel%2);
     tamannio=f*columnas;
     grafo->arbol(f,columnas);
+    grafo->mostrar_grafo();
     VInterfaz.pintarGrafo(grafo,nivel);
     VInterfaz.personaje.DPersonaje1(0);
     VInterfaz.personaje.DPersonaje1(1);
