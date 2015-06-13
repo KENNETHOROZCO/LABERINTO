@@ -152,7 +152,6 @@ void generar(DLinkedList<int> *lista){
         insertar_nodo(indice2);
         addArista(indice1,indice2,true);
     }
-    //mostrar_grafo();
 }
 
 DLinkedList<Nodo> *getFinal(DLinkedList<Nodo> *lista){
@@ -172,7 +171,6 @@ DLinkedList<Nodo> *getFinal(DLinkedList<Nodo> *lista){
         int indice2=listaNodos->getElement()->numero;
         addArista(indice1,indice2,true);
     }
-    //mostrar_grafo();
     return temp;
 }
 
@@ -225,7 +223,6 @@ void arbol(int x,int y){
     reordenar(x,y);
     listaNodos->goToPos(listaNodos->getSize()-1);
     listaNodos->getElement()->setSalida(true);
-    //mostrar_grafo();
 }
 
 bool existe(int indice, DLinkedList<arista> *lista){
@@ -326,11 +323,10 @@ void agregarAristasExtras(int x, int y){
     srand(time(NULL));
     int res=x*y;
     bool bandera;
-    for(int i =0;i<(res*0.05);i++){
+    for(int i =0;i<(res*0.10);i++){
         bandera=false;
-        int num1 = (rand()%x*y)/(((res*0.05)/2)-i);
+        int num1 = (rand()%res)/(((res*0.05)/2)-i);
         while(!bandera){
-                cout<<"ciclo"<<endl;
             if(num1<0){
                 ++num1;
                 bandera=false;
@@ -341,7 +337,6 @@ void agregarAristasExtras(int x, int y){
                 bandera=false;
                 continue;
             }
-
             if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=1){
             addArista(num1,num1-1,true);
             bandera=true;

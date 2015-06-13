@@ -46,7 +46,7 @@
 	<map>
 	<process.h>
 
-1434169601 source:c:\users\hpcorei 3\desktop\laberinto\proyecto_2\main.cpp
+1434215322 source:c:\users\hpcorei 3\desktop\laberinto\proyecto_2\main.cpp
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
@@ -61,7 +61,7 @@
 	<sstream>
 	<Grafo.h>
 
-1434167152 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\personaje.h
+1434213469 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\personaje.h
 	<stdio.h>
 	<stdlib.h>
 	<stdint.h>
@@ -69,7 +69,7 @@
 	<iostream>
 	<math.h>
 
-1434170498 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\interfaz.h
+1434215133 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\interfaz.h
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
@@ -95,7 +95,7 @@
 	<map>
 	<process.h>
 
-1434168485 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\grafo.h
+1434190534 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\grafo.h
 	<iostream>
 	<conio.h>
 	<Nodo.h>
@@ -122,7 +122,7 @@
 1433639972 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\heapnode.h
 	<Nodo.h>
 
-1434173608 source:c:\users\andrey\desktop\laberinto\proyecto_2\main.cpp
+1434168166 source:c:\users\andrey\desktop\laberinto\proyecto_2\main.cpp
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
@@ -145,7 +145,7 @@
 	<iostream>
 	<math.h>
 
-1434173608 c:\users\andrey\desktop\laberinto\proyecto_2\include\interfaz.h
+1434168166 c:\users\andrey\desktop\laberinto\proyecto_2\include\interfaz.h
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
@@ -156,7 +156,7 @@
 	<sstream>
 	<Grafo.h>
 
-1434178161 c:\users\andrey\desktop\laberinto\proyecto_2\include\grafo.h
+1434168412 c:\users\andrey\desktop\laberinto\proyecto_2\include\grafo.h
 	<iostream>
 	<conio.h>
 	<Nodo.h>
@@ -192,82 +192,6 @@
 	<ostream>
 
 1433641538 source:c:\users\andrey\desktop\laberinto\proyecto_2\tinythread.cpp
-	<exception>
-	"tinythread.h"
-	<unistd.h>
-	<map>
-	<process.h>
-
-1434173608 source:c:\users\andrey\desktop\laberinto0\proyecto_2\main.cpp
-	<iostream>
-	<stdio.h>
-	<stdlib.h>
-	<conio.h>
-	<direct.h>
-	<string.h>
-	<winbgim.h>
-	<windows.h>
-	<Personaje.h>
-	<Interfaz.h>
-	<tinythread.h>
-	<sstream>
-	<Grafo.h>
-
-1434168166 c:\users\andrey\desktop\laberinto0\proyecto_2\include\personaje.h
-	<stdio.h>
-	<stdlib.h>
-	<stdint.h>
-	<string.h>
-	<iostream>
-	<math.h>
-
-1434173608 c:\users\andrey\desktop\laberinto0\proyecto_2\include\interfaz.h
-	<iostream>
-	<stdio.h>
-	<stdlib.h>
-	<conio.h>
-	<direct.h>
-	<string.h>
-	<Personaje.h>
-	<sstream>
-	<Grafo.h>
-
-1434179470 c:\users\andrey\desktop\laberinto0\proyecto_2\include\grafo.h
-	<iostream>
-	<conio.h>
-	<Nodo.h>
-	<DLinkedList.h>
-	<stdlib.h>
-	<time.h>
-	<MinHeap.h>
-
-1433662960 c:\users\andrey\desktop\laberinto0\proyecto_2\include\nodo.h
-	<DLinkedList.h>
-
-1433641537 c:\users\andrey\desktop\laberinto0\proyecto_2\include\dlinkedlist.h
-	<stdexcept>
-	"DNode.h"
-
-1433641537 c:\users\andrey\desktop\laberinto0\proyecto_2\include\dnode.h
-	<Nodo.h>
-
-1433641814 c:\users\andrey\desktop\laberinto0\proyecto_2\include\minheap.h
-	"HeapNode.h"
-	<stdexcept>
-	<Nodo.h>
-
-1433641814 c:\users\andrey\desktop\laberinto0\proyecto_2\include\heapnode.h
-	<Nodo.h>
-
-1433641538 c:\users\andrey\desktop\laberinto0\proyecto_2\include\tinythread.h
-	<windows.h>
-	<pthread.h>
-	<signal.h>
-	<sched.h>
-	<unistd.h>
-	<ostream>
-
-1433641538 source:c:\users\andrey\desktop\laberinto0\proyecto_2\tinythread.cpp
 	<exception>
 	"tinythread.h"
 	<unistd.h>

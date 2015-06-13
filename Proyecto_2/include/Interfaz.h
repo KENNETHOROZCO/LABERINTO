@@ -20,7 +20,7 @@ private:
     int color;
     int maxx;
     int maxy;
-    int posx,posy,posAntX,posAntY;
+    int posx,posy,posAntX,posAntY,RFondo,GFondo,BFondo;
 
 public:
     bool pausa;
@@ -30,14 +30,18 @@ public:
     pausa=false;
     fin = true;
     desplazar=60;
-    maxx = 900;
+    maxx = 1000;
     maxy = 740;
+    RFondo=102;//160 tods
+    GFondo=0;
+    BFondo=0;
+    personaje.fondo(RFondo,GFondo,BFondo);
     }
     virtual ~Interfaz() {}
     // INICIALIZACION DE MODO GRAFICO
     void crearVentana(){
         initwindow(maxx, maxy);
-        setbkcolor(COLOR(0,0,0));// 255,255,102
+        setbkcolor(COLOR(RFondo,GFondo,BFondo));// 255,255,102
         cleardevice();
     }
     void posInicial(int x, int y){
@@ -130,7 +134,7 @@ public:
         }
     }
     //RECIBE EL GRAFO Y LA REPRESENTA EN MODO GRAFICO
-    void pintarGrafo(Grafo *&grafo,int nivel){
+    void pintarGrafo(Grafo *&grafo){
         int x=personaje.getX();
         int y=personaje.getY();
         grafo->listaNodos->goToStart();
@@ -215,7 +219,7 @@ public:
                     g+=20;
                     b+=30;
             }
-            else{setfillstyle(SOLID_FILL,COLOR(0,0,0));}
+            else{setfillstyle(SOLID_FILL,COLOR(RFondo,GFondo,BFondo));}
             Nodo *nodo=ruta->getElement();
             if(nodo->getNumero()==posActual+1){
                 xActual+=60;
@@ -245,7 +249,7 @@ public:
                 break;
             }
         }
-        personaje.DPersonaje1(0);
+        personaje.DPersonaje1(0,3);
     }
     //DETECTA SI UNA TECLA FUE SELECCIONADA Y VERIFICA CUAL FUE
     void teclaSeleccionada(int &tecla, Grafo *&grafo){
@@ -284,9 +288,9 @@ public:
     //MUEVE AL PERSONAJE CONFORME ES PRESIONADA UNA TECLA
     void mover(Grafo *&grafo){
         int tecla;
-        personaje.DPersonaje1(0); //PINTA EL PERSONAJE
+        personaje.DPersonaje1(0,3); //PINTA EL PERSONAJE
         tecla = getch();// GUARDA LA TECLA SELECCIONADA
-        personaje.DPersonaje1(1);//BORRA EL PERSONAJE
+        personaje.DPersonaje1(1,3);//BORRA EL PERSONAJE
         grafo->listaNodos->goToPos(personaje.getPosicion());
         Nodo *nodo=grafo->listaNodos->getElement();
         recogerGifs(nodo);// REVISA SI PASO POR UN GIF

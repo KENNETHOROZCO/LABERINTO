@@ -12,9 +12,9 @@ private:
     int ejeX;
     int ejeY;
     int rumbo;
-    int RT;
-    int GT;
-    int BT;
+    int RT,RFondo;
+    int GT,GFondo;
+    int BT,BFondo;
     int extraTime;
     int gifs;
     int gifsP;
@@ -31,8 +31,11 @@ public:
         ejeX=480;
         ejeY=380;
         RT=0;
-        GT=0;
+        GT=255;
         BT=0;
+        RFondo=0;
+        GFondo=0;
+        BFondo=0;
         extraTime=0;
         gifs=0;
         gifsP=0;
@@ -40,10 +43,10 @@ public:
         posicion=0;
         ayuda=false;
     }
-    void home1(){
-        rumbo=0;
-        ejeX=350;
-        ejeY=350;
+    void fondo(int r, int g, int b){
+        RFondo=r;
+        GFondo=g;
+        BFondo=b;
     }
     //setter modifican los atributos
     void setAyuda(bool a){
@@ -123,54 +126,13 @@ public:
     int getPuntaje(){
         return puntaje;
     }
-    //dibuja la tortuga
-void DPersonaje(int b){
-    setlinestyle(6,1,3);
-    if(b==1){RT=0;GT=102;BT=102;}//200,165,20
-    else{RT=0;GT=255;BT=0;}
-    setcolor(COLOR(RT,GT,BT));
-    //cuerpo
-    setfillstyle(1,COLOR(RT,GT,BT));
-    //cabeza
-    int x2=cos((rumbo*M_PI)/180)*11;//18
-    int y2=sin((rumbo*M_PI)/180)*11;//18
-    fillellipse(ejeX+x2,ejeY+y2,4,4);//8-7
-    //pie Superior Izquierdo
-    int rumbo2=fmod(rumbo-60,360);
-    int x3=cos((rumbo2*M_PI)/180)*11;//17
-    int y3=sin((rumbo2*M_PI)/180)*11;//17
-    fillellipse(ejeX+x3,ejeY+y3,2,2);//5-5
-    //pie Inferior Izquierdo
-    int rumbo3=fmod(rumbo-130,360);
-    int x4=cos((rumbo3*M_PI)/180)*12;//17
-    int y4=sin((rumbo3*M_PI)/180)*12;//17
-    fillellipse(ejeX+x4,ejeY+y4,2,2);//5-5
-    //pie Superior Derecho
-    int rumbo4=fmod(rumbo-300,360);
-    int x5=cos((rumbo4*M_PI)/180)*11;//17
-    int y5=sin((rumbo4*M_PI)/180)*11;//17
-    fillellipse(ejeX+x5,ejeY+y5,2,2);//5-5
-    //pie Inferior Derecho
-    int rumbo5=fmod(rumbo-230,360);
-    int x6=cos((rumbo5*M_PI)/180)*12;//18
-    int y6=sin((rumbo5*M_PI)/180)*12;//18
-    fillellipse(ejeX+x6,ejeY+y6,2,2);
-    if(b==0){
-       setfillstyle(INTERLEAVE_FILL,COLOR(0,102,102));
-    }
-    else{
-        setfillstyle(HATCH_FILL,COLOR(RT,GT,BT));//100 51 25
-    }
-    fillellipse(ejeX,ejeY,7,7);
 
-}
-
-void DPersonaje1(int pintar){
-    int tam=3;
+void DPersonaje1(int pintar,int pTam){
+    int tam=pTam;
     int x=ejeX-2;
     int y=ejeY-12;
     if(pintar==0){
-        setfillstyle(SOLID_FILL,COLOR(0,255,0));
+        setfillstyle(SOLID_FILL,COLOR(RT,GT,BT));
         int a=x,b=y;
         for (int i=0;i<3;i++){
             bar(a,b,a+tam,b+tam);
@@ -201,7 +163,7 @@ void DPersonaje1(int pintar){
         }
     }
     else{
-       setfillstyle(SOLID_FILL,COLOR(0,0,0));
+       setfillstyle(SOLID_FILL,COLOR(RFondo,GFondo,BFondo));
        bar(x-(2*tam),y,x+15,y+25);
     }
 }
