@@ -317,7 +317,7 @@ public:
                     Sleep(900);
                 }
                 else{
-                    setcolor(COLOR(102,51,0));
+                    setcolor(COLOR(255,255,51));
                     outtextxy(maxx-x, maxy-y, cronometro);
                     Sleep(1);
                     outtextxy(maxx-x, maxy-y, "          ");
