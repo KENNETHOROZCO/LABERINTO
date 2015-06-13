@@ -325,7 +325,7 @@ void agregarAristasExtras(int x, int y){
                 continue;
             }
 
-            if(num1-y>0&&!existe(num1,num1-1)&&num1%y!=1){
+            if(num1-y>0&&!existe(num1-1,num1)&&!existe(num1,num1-1)&&num1%y!=1){
             addArista(num1,num1-1);
             bandera=true;
             break;
