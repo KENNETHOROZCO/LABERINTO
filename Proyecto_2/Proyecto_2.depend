@@ -122,7 +122,7 @@
 1433639972 c:\users\hpcorei 3\desktop\laberinto\proyecto_2\include\heapnode.h
 	<Nodo.h>
 
-1434168166 source:c:\users\andrey\desktop\laberinto\proyecto_2\main.cpp
+1434173608 source:c:\users\andrey\desktop\laberinto\proyecto_2\main.cpp
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
@@ -145,7 +145,7 @@
 	<iostream>
 	<math.h>
 
-1434168166 c:\users\andrey\desktop\laberinto\proyecto_2\include\interfaz.h
+1434173608 c:\users\andrey\desktop\laberinto\proyecto_2\include\interfaz.h
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
@@ -156,7 +156,7 @@
 	<sstream>
 	<Grafo.h>
 
-1434168412 c:\users\andrey\desktop\laberinto\proyecto_2\include\grafo.h
+1434177737 c:\users\andrey\desktop\laberinto\proyecto_2\include\grafo.h
 	<iostream>
 	<conio.h>
 	<Nodo.h>
