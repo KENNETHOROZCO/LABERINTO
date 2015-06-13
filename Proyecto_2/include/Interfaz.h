@@ -181,7 +181,7 @@ public:
             }
             nodo->listaAristas->goToPos(1);
             if(direccion=="R" && nodo->listaAristas->getElement()->nodoDestino->numero==nodo->getNumero()+1
-            || nodo->getSalida()){
+            ){
                 posx = (posx + desplazar) % maxx;
                 personaje.setX(posx);
             }
@@ -206,8 +206,15 @@ public:
         ruta->goToPos(ruta->getSize()-1);
         int posActual=ruta->getElement()->numero;
         cout<<"actual"<<posActual<<endl;
+        int r=0;
+        int g=25;
+        int b=351;
         for(ruta->goToPos(ruta->getSize()-2);ruta->getPos()>=0;ruta->previous()){
-            if(pintar){setfillstyle(SOLID_FILL,COLOR(100,123,34));}
+            if(pintar){
+                    setfillstyle(SOLID_FILL,COLOR(r,g,b));
+                    g+=20;
+                    b+=30;
+            }
             else{setfillstyle(SOLID_FILL,COLOR(0,0,0));}
             Nodo *nodo=ruta->getElement();
             if(nodo->getNumero()==posActual+1){

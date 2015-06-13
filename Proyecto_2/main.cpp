@@ -38,7 +38,7 @@ void posInicio(){
     VInterfaz.posInicial(x,y);
 }
 void setTiempo(){
-    segundos=5;
+    segundos=(nivel/4+1)*7;
     segundos+=VInterfaz.personaje.getExtraTime()+1;
     VInterfaz.personaje.setExtraTime(0);
 }
@@ -64,7 +64,6 @@ void finDelJuego(){
         posInicio();
         setTiempo();
         iniciarJuego();
-
     }
 }
 void cambiarCronometro(){
